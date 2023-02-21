@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Button from '@mui/material/Button';
+import { io } from 'socket.io-client';
 
-function App() {
+function App () {
+  React.useEffect( () => {
+    const socket = io( 'http://localhost:4000' );
+    socket.on( 'connect', () => {
+      console.log( 'Connected to server' );
+    } );
+    socket.on( 'disconnect', () => {
+      console.log( 'Disconnected from server' );
+    } );
+  }, [] );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      Hello socket
+      <Button variant='text'>Text</Button>
     </div>
   );
 }
