@@ -1,24 +1,19 @@
 import React from 'react';
-import Button from '@mui/material/Button';
 import { io } from 'socket.io-client';
+import ChatWindow from './components/ChatWindow';
 
 function App () {
+  const [ socket, setSocket ] = React.useState( null );
+
   React.useEffect( () => {
-    const socket = io( 'http://localhost:4000' );
-    socket.on( 'connect', () => {
-      console.log( 'Connected to server' );
-    } );
-    socket.on( 'disconnect', () => {
-      console.log( 'Disconnected from server' );
-    } );
+    setSocket( io( 'http://localhost:4000' ) );
   }, [] );
 
   return (
     <div>
-      Hello socket
-      <Button variant='text'>Text</Button>
+      {socket ? <ChatWindow socket={socket} /> : 'Connecting to server...'}
     </div>
   );
-}
+};
 
 export default App;

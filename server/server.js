@@ -28,8 +28,15 @@ const io = new Server( httpServer, {
 
 
 io.on( 'connection', ( socket ) => {
-  console.log( 'a user connected' );
+  socket.on( 'send-message', ( data ) => {
+    socket.emit( 'response-from-server', data );
+  } );
+  socket.on( 'disconnect', () => {
+    console.log( 'user disconnected' );
+  } );
 } );
+
+
 
 // connect to database
 conexion();
