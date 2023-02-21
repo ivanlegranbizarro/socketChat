@@ -3,11 +3,13 @@ import http from 'http';
 import { Server } from 'socket.io';
 import userRoutes from './routes/userRoutes.js';
 import conexion from './db/conexion.js';
+import cors from 'cors';
 
 const app = express();
 
 // middlewares
 app.use( express.json() );
+app.use( cors( { origin: [ 'http://localhost:3000' ] } ) );
 
 // routes
 app.use( '/api/users', userRoutes );
