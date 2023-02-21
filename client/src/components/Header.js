@@ -22,6 +22,11 @@ function Header () {
     setAnchorEl( null );
   };
 
+  const handleLogout = () => {
+    setAnchorEl( null );
+    localStorage.removeItem( 'token' );
+  };
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -47,7 +52,7 @@ function Header () {
         <Button color="inherit" component={Link} to="/signup">
           Signup
         </Button>
-        <Button color="inherit" component={Link} to="/logout">
+        <Button color="inherit" component={Link} to="/login" onClick={handleLogout}>
           Logout
         </Button>
       </Toolbar>
