@@ -3,6 +3,7 @@ import App from "./App";
 import ChatWindow from "./components/ChatWindow";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter( [
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter( [
   {
     path: "/signup",
     element: <Register />
+  },
+  {
+    path: "*",
+    element: <NotFound />
   }
 ] );
 
