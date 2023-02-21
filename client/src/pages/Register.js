@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import {
   Button,
@@ -166,6 +166,12 @@ function Register () {
           >
             Register
           </Button>
+          <Typography variant="body2" align="center">
+            Have not an account yet?{' '}
+            <Link to="/login" style={{ textDecoration: 'none', color: '#777' }}>
+              Login
+            </Link>
+          </Typography>
           {errors.general && (
             <Typography variant="body2" color="error">
               {errors.general}

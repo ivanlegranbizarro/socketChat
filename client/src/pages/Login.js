@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import {
   Button,
@@ -101,6 +101,13 @@ function Login () {
           >
             Login
           </Button>
+          <Typography variant="body2" align="center">
+            Have not an account yet?{' '}
+            <Link to="/register" style={{ textDecoration: 'none', color: '#777' }}>
+              Sign up
+            </Link>
+          </Typography>
+
           {error && (
             <Box
               sx={{
@@ -116,6 +123,7 @@ function Login () {
                 {error}
               </Typography>
             </Box>
+
           )}
         </Box>
       </Box>
