@@ -7,8 +7,8 @@ function PrivateRoute ( { path, element } ) {
   useEffect( () => {
     const token = localStorage.getItem( "token" );
     if ( token ) {
+      console.log( "token", token );
       setIsAuthenticated( true );
-      <Navigate to="/" />;
     }
   }, [] );
 
