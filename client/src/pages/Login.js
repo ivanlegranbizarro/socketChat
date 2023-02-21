@@ -30,7 +30,7 @@ function Login () {
       const response = await fetch( 'http://localhost:4000/api/users/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify( {
           email,
@@ -42,7 +42,6 @@ function Login () {
 
       if ( data.success ) {
         localStorage.setItem( 'token', data.data.token );
-        // Redirect to another page on successful login
         navigate( '/' );
       } else {
         setError( data.message );

@@ -4,6 +4,7 @@ import ChatWindow from "./components/ChatWindow";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+import PrivateRoute from "./components/PrivateRoute";
 
 const router = createBrowserRouter( [
   {
@@ -12,7 +13,7 @@ const router = createBrowserRouter( [
     children: [
       {
         path: "/chat",
-        element: <ChatWindow />
+        element: <PrivateRoute path="/chat" element={<ChatWindow />} />
       }
     ]
   },
