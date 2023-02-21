@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { io } from 'socket.io-client';
-import { Button, Paper } from '@mui/material';
+import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import SendIcon from '@mui/icons-material/Send';
 import Card from '@mui/material/Card';
@@ -23,8 +23,8 @@ const ChatContainer = styled( Box )( {
   '&::-webkit-scrollbar-track': {
     backgroundColor: '#fff'
   },
-  marginRight: '20px',  // modificamos el margen derecho en lugar del izquierdo
-  width: '65%',  // reducimos el ancho al 50%
+  marginRight: '20px',
+  width: '65%',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -48,7 +48,7 @@ const ChatButton = styled( Button )( {
 } );
 
 const FormContainer = styled( Box )( {
-  width: '35%',  // ocupamos el otro 50% del ancho
+  width: '35%',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -57,10 +57,38 @@ const FormContainer = styled( Box )( {
 } );
 
 function ChatWindow () {
-  const [ socket, setSocket ] = React.useState( null );
-  const [ message, setMessage ] = React.useState( '' );
-  const [ chat, setChat ] = React.useState( [] );
-  const [ error, setError ] = React.useState( false );
+  const [ socket, setSocket ] = useState( null );
+  const [ message, setMessage ] = useState( '' );
+  const [ chat, setChat ] = useState( [] );
+  const [ isTyping, setIsTyping ] = useState( false );
+  const [ error, setError ] = useState( false );
+
+  let typingTimeout = null;
+
+  const handleTypingStart = () => {
+    if ( !isTyping ) {
+      setIsTyping( true );
+      socket.emit( 'typing-start' );
+    }
+  };
+
+  const handleTypingStop = () => {
+    if ( isTyping ) {
+      setIsTyping( false );
+      socket.emit( 'typing-stop' );
+    }
+  };
+
+  const handleKeyUp = ( e ) => {
+    clearTimeout( typingTimeout );
+    typingTimeout = setTimeout( () => handleTypingStop(), 1000 );
+    handleTypingStart();
+  };
+
+  const handleBlur = () => {
+    clearTimeout( typingTimeout );
+    handleTypingStop();
+  };
 
   React.useEffect( () => {
     setSocket( io( 'http://localhost:4000' ) );
@@ -70,6 +98,14 @@ function ChatWindow () {
     if ( !socket ) return;
     socket.on( 'response-from-server', ( data ) => {
       setChat( ( prev ) => [ ...prev, data.message ] );
+    } );
+
+    socket.on( 'typing-start', () => {
+      setIsTyping( true );
+    } );
+
+    socket.on( 'typing-stop', () => {
+      setIsTyping( false );
     } );
   }, [ socket ] );
 
@@ -87,35 +123,48 @@ function ChatWindow () {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
       <ChatContainer>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          {chat.map( ( message, index ) => (
-            <Paper key={index} sx={{ padding: '10px', marginBottom: '10px' }}>
-              <Typography variant='body1'>{message}</Typography>
-            </Paper>
-          ) )}
-        </Box>
+        {chat.map( ( message, index ) => (
+          <Card
+            sx={{
+              width: '50%',
+              padding: '10px',
+              marginBottom: '10px',
+              backgroundColor: '#1976d2',
+              color: '#fff',
+            }}
+            key={index}
+          >
+            <Typography variant="body1">{message}</Typography>
+          </Card>
+        ) )}
+        {isTyping && (
+          <Typography variant="body1" sx={{ color: '#1976d2' }}>
+            Someone is typing...
+          </Typography>
+        )}
       </ChatContainer>
       <FormContainer>
-        <Card sx={{ width: '100%', padding: '10px' }}>
-          <Typography variant='h5'>Chat</Typography>
-          <form onSubmit={handleForm}>
-            <MessageInput
-              label='Message'
-              variant='outlined'
-              value={message}
-              onChange={( e ) => setMessage( e.target.value )}
-              error={error}
-              helperText={error && 'Please enter a message'}
-            />
-            <ChatButton
-              variant='contained'
-              endIcon={<SendIcon />}
-              type='submit'
-            >
-              Send
-            </ChatButton>
-          </form>
-        </Card>
+        <Typography variant="h5">Send a message</Typography>
+        <form onSubmit={handleForm}>
+          <MessageInput
+            label="Message"
+            variant="outlined"
+            value={message}
+            onChange={( e ) => setMessage( e.target.value )}
+            onKeyUp={handleKeyUp}
+            onBlur={handleBlur}
+            error={error}
+            helperText={error && 'Please enter a message'}
+          />
+          <ChatButton
+            variant="contained"
+            endIcon={<SendIcon />}
+            type="submit"
+            onClick={handleForm}
+          >
+            Send
+          </ChatButton>
+        </form>
       </FormContainer>
     </Box>
   );

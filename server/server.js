@@ -26,15 +26,24 @@ const io = new Server( httpServer, {
 
 
 
-
 io.on( 'connection', ( socket ) => {
   socket.on( 'send-message', ( data ) => {
     socket.emit( 'response-from-server', data );
   } );
+
+  socket.on( 'typing-start', () => {
+    socket.broadcast.emit( 'typing-start' );
+  } );
+
+  socket.on( 'typing-stop', () => {
+    socket.broadcast.emit( 'typing-stop' );
+  } );
+
   socket.on( 'disconnect', () => {
     console.log( 'user disconnected' );
   } );
 } );
+
 
 
 
