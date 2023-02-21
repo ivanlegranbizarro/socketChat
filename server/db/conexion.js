@@ -1,10 +1,10 @@
-const mongoose = require( 'mongoose' );
+import { set, connect } from 'mongoose';
 
-mongoose.set( 'strictQuery', false );
+set( 'strictQuery', false );
 
 const conexion = async () => {
   try {
-    await mongoose.connect( 'mongodb://localhost:27017/chat' );
+    await connect( 'mongodb://localhost:27017/socketChat' );
     console.log( 'Conectado a la base de datos' );
   } catch ( error ) {
     console.log( error );
@@ -13,6 +13,5 @@ const conexion = async () => {
 };
 
 
-module.exports = {
-  conexion
-};
+
+export default conexion;
