@@ -4,7 +4,7 @@ import ChatWindow from "./components/ChatWindow";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
-import PrivateRoute from "./components/PrivateRoute";
+import { useNavigate } from 'react-router-dom';
 
 const router = createBrowserRouter( [
   {
@@ -13,7 +13,7 @@ const router = createBrowserRouter( [
     children: [
       {
         path: "/chat",
-        element: <PrivateRoute path="/chat" element={<ChatWindow />} />
+        element: <RouteChatWindow />
       }
     ]
   },
@@ -30,5 +30,16 @@ const router = createBrowserRouter( [
     element: <NotFound />
   }
 ] );
+
+function RouteChatWindow () {
+  const navigate = useNavigate();
+  const token = localStorage.getItem( 'token' );
+  if ( token ) {
+    return <ChatWindow />;
+  } else {
+    navigate( '/login' );
+    return null;
+  }
+}
 
 export default router;
