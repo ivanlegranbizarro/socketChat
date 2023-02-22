@@ -35,16 +35,22 @@ io.on( 'connection', async ( socket ) => {
     console.error( error.message );
   }
 
-  socket.on( 'send-message', ( data ) => {
-    socket.emit( 'response-from-server', data );
-  } );
-
-  socket.on( 'typing-start', () => {
-    socket.broadcast.emit( 'typing-start' );
-  } );
-
-  socket.on( 'typing-stop', () => {
-    socket.broadcast.emit( 'typing-stop' );
+  socket.on( 'send-message', async ( data ) => {
+    try {
+      const room = await Room.findOne( { name: data.room } );
+      if ( room ) {
+        room.messages.push( {
+          user: socket.id,
+          message: data.message,
+        } );
+        await room.save();
+        io.emit( 'response-from-server', room );
+      } else {
+        console.error( `Room ${ data.room } not found.` );
+      }
+    } catch ( error ) {
+      console.error( error.message );
+    }
   } );
 
   socket.on( 'createRoom', async ( roomName ) => {

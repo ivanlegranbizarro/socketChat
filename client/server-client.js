@@ -12,6 +12,11 @@ app.get( '/chat', ( req, res ) => {
   res.sendFile( new URL( 'index.html', import.meta.url ).pathname );
 } );
 
+app.get( '/room/:name', ( req, res ) => {
+  res.sendFile( new URL( 'room.html', import.meta.url ).pathname );
+} );
+
+
 app.get( '/register', ( req, res ) => {
   res.sendFile( new URL( 'register.html', import.meta.url ).pathname );
 } );
