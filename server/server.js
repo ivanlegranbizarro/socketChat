@@ -39,7 +39,7 @@ io.on( 'connection', async ( socket ) => {
     try {
       const token = socket.handshake.auth.token;
       const decoded = jwt.verify( token, process.env.JWT_SECRET );
-      const user = decoded.id;
+      const user = decoded._id; // Renombramos la propiedad '_id' a 'id'
       const room = await Room.findOne( { name: data.room } );
       if ( room ) {
         room.messages.push( {
@@ -47,7 +47,10 @@ io.on( 'connection', async ( socket ) => {
           message: data.message,
         } );
         await room.save();
-        io.emit( 'response-from-server', room );
+        io.emit( 'response-from-server', {
+          room: room.name, // Enviamos el nombre de la sala junto con los mensajes
+          messages: room.messages,
+        } );
       } else {
         console.error( `Room ${ data.room } not found.` );
       }

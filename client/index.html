@@ -13,6 +13,7 @@
     <div class="container">
       <a class="navbar-brand" href="/chat">ChatSocket</a>
       <div class="navbar-nav">
+        <a class="nav-link" href="/register">Signup</a>
         <a class="nav-link" href="/">Logout</a>
       </div>
     </div>
@@ -78,8 +79,10 @@
         li.innerText = room.name;
         li.style.cursor = "pointer";
         li.addEventListener( "click", () => {
+          localStorage.setItem( "roomName", room.name );
           window.location.href = `/room/${ room.name }`;
         } );
+
         roomList.appendChild( li );
       } );
     } );
