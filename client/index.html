@@ -44,7 +44,6 @@
     const roomNameInput = document.getElementById( "room-name-input" );
     const validationMessage = document.getElementById( "validation-message" );
 
-    // Add event listener to create room form
     createRoomForm.addEventListener( "submit", ( e ) => {
       e.preventDefault();
       const roomName = roomNameInput.value;
@@ -57,14 +56,12 @@
       }
     } );
 
-    // Add event listener to clear validation message when input is changed
     roomNameInput.addEventListener( "input", () => {
       if ( validationMessage.innerText ) {
         validationMessage.innerText = "";
       }
     } );
 
-    // Add event listener to receive rooms from the server
     socket.on( "rooms", ( rooms ) => {
       roomList.innerHTML = "";
       rooms.forEach( ( room ) => {
