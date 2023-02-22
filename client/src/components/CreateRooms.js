@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { io } from 'socket.io-client';
 
 const FormContainer = styled( Box )( {
   backgroundColor: '#fff',
@@ -36,11 +37,13 @@ const FormButton = styled( Button )( {
 } );
 
 function CreateRooms () {
+  const [ socket, setSocket ] = useState( null );
   const [ roomName, setRoomName ] = useState( '' );
 
   const handleForm = ( e ) => {
     e.preventDefault();
-    // Aquí puedes enviar los datos del formulario al backend
+    socket.emit( 'createRoom', roomName );
+    setRoomName( '' );
   };
 
   return (
