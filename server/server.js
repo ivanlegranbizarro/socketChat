@@ -6,6 +6,7 @@ import notFoundRoutes from './routes/NotFound.js';
 import conexion from './db/conexion.js';
 import cors from 'cors';
 import Room from './models/roomModel.js';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 
@@ -27,7 +28,6 @@ const io = new Server( httpServer, {
 } );
 
 io.on( 'connection', async ( socket ) => {
-  // Emitir las salas disponibles a todos los clientes conectados
   try {
     const rooms = await Room.find();
     io.emit( 'rooms', rooms );
@@ -37,10 +37,13 @@ io.on( 'connection', async ( socket ) => {
 
   socket.on( 'send-message', async ( data ) => {
     try {
+      const token = socket.handshake.auth.token;
+      const decoded = jwt.verify( token, process.env.JWT_SECRET );
+      const user = decoded.id;
       const room = await Room.findOne( { name: data.room } );
       if ( room ) {
         room.messages.push( {
-          user: socket.id,
+          user,
           message: data.message,
         } );
         await room.save();

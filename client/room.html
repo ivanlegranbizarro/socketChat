@@ -46,16 +46,22 @@
 
         <script src="http://localhost:4000/socket.io/socket.io.js"></script>
         <script>
-          const socket = io( "http://localhost:4000" );
+          const token = localStorage.getItem( 'token' );
+          const socket = io( 'http://localhost:4000', {
+            auth: {
+              token: token
+            }
+          } );
+
           const messagesContainer = document.getElementById( "messages" );
           const messageForm = document.getElementById( "message-form" );
           const messageInput = document.getElementById( "message-input" );
           const urlParams = new URLSearchParams( window.location.search );
           const roomName = urlParams.get( "name" );
-
           // Join the room and get the room information from the server
           socket.emit( "join-room", roomName, ( room ) => {
             // Update the room name in the HTML
+
             const roomNameElement = document.querySelector( "h1" );
             roomNameElement.textContent = room.name;
 
@@ -80,7 +86,7 @@
             const messageClass = data.isCurrentUser ? "bg-primary text-white" : "bg-secondary text-white";
             const messageHTML = `
               <div class="my-2 p-2 rounded ${ messageClass }">
-                < span class="fw-bold" >${ data.username }</span>
+                < span class="fw-bold" >${ data.user.name }</span>
                 <span>${ data.message }</span>
               </div>
             `;
