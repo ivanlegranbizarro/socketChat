@@ -1,40 +1,38 @@
 import React, { useState } from 'react';
 import { TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import { io } from 'socket.io-client';
-import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import Card from '@mui/material/Card';
+import CreateRooms from './CreateRooms';
 
 const ChatContainer = styled( Box )( {
   backgroundColor: '#fff',
   borderRadius: '10px',
   boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
   padding: '10px',
-  height: '80vh',
+  height: '70vh',
   overflow: 'scroll',
   '&::-webkit-scrollbar': {
-    width: '6px'
+    width: '6px',
   },
   '&::-webkit-scrollbar-thumb': {
-    backgroundColor: '#1976d2'
+    backgroundColor: '#1976d2',
   },
   '&::-webkit-scrollbar-track': {
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
-  marginRight: '20px',
-  width: '65%',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginTop: '50px',
+  marginLeft: '40px',
+  marginTop: '48px',
 } );
 
 const MessageInput = styled( TextField )( {
   width: '100%',
-  marginTop: '10px'
+  marginTop: '10px',
+  marginLeft: '15px',
 } );
 
 const ChatButton = styled( Button )( {
@@ -43,17 +41,9 @@ const ChatButton = styled( Button )( {
   backgroundColor: '#1976d2',
   color: '#fff',
   '&:hover': {
-    backgroundColor: '#1e88e5'
-  }
-} );
-
-const FormContainer = styled( Box )( {
-  width: '35%',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginTop: '50px',
+    backgroundColor: '#1e88e5',
+  },
+  marginLeft: '15px',
 } );
 
 function ChatWindow () {
@@ -122,50 +112,42 @@ function ChatWindow () {
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-      <ChatContainer>
-        {chat.map( ( message, index ) => (
-          <Card
-            sx={{
-              width: '50%',
-              padding: '10px',
-              marginBottom: '10px',
-              backgroundColor: '#1976d2',
-              color: '#fff',
-            }}
-            key={index}
-          >
-            <Typography variant="body1">{message}</Typography>
-          </Card>
-        ) )}
-        {isTyping && (
-          <Typography variant="body1" sx={{ color: '#1976d2' }}>
-            Someone is typing...
-          </Typography>
-        )}
-      </ChatContainer>
-      <FormContainer>
-        <Typography variant="h5">Send a message</Typography>
-        <form onSubmit={handleForm}>
-          <MessageInput
-            label="Message"
-            variant="outlined"
-            value={message}
-            onChange={( e ) => setMessage( e.target.value )}
-            onKeyUp={handleKeyUp}
-            onBlur={handleBlur}
-            error={error}
-            helperText={error && 'Please enter a message'}
-          />
-          <ChatButton
-            variant="contained"
-            endIcon={<SendIcon />}
-            type="submit"
-            onClick={handleForm}
-          >
-            Send
-          </ChatButton>
-        </form>
-      </FormContainer>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <ChatContainer>
+            {chat.map( ( message, index ) => (
+              <Card key={index} sx={{ marginBottom: '10px' }}>
+                <Typography variant="body1">{message}</Typography>
+              </Card>
+            ) )}
+            {isTyping && (
+              <Typography variant="body1">Someone is typing...</Typography>
+            )}
+          </ChatContainer>
+          <form onSubmit={handleForm}>
+            <MessageInput
+              label="Message"
+              variant="outlined"
+              value={message}
+              onChange={( e ) => setMessage( e.target.value )}
+              onKeyUp={handleKeyUp}
+              onBlur={handleBlur}
+              error={error}
+              helperText={error && 'Please enter a message'}
+            />
+            <ChatButton
+              variant="contained"
+              endIcon={<SendIcon />}
+              type="submit"
+            >
+              Send
+            </ChatButton>
+          </form>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <CreateRooms />
+        </Grid>
+      </Grid>
     </Box>
   );
 }
