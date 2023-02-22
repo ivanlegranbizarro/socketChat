@@ -9,86 +9,75 @@
 </head>
 
 <body>
-  <h1>Socket.io Client Example</h1>
-
-  <div id="rooms-list">
-    <h2>Rooms:</h2>
-    <ul id="rooms"></ul>
-  </div>
-
-  <div id="chat" style="display: none">
-    <h2 id="room-name"></h2>
-
-    <div id="messages"></div>
-
-    <form>
-      <input id="message-input" type="text" placeholder="Type your message" />
-      <button id="send-button" type="submit">Send</button>
-    </form>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h1>Available Rooms</h1>
+          </div>
+          <div class="card-body">
+            <ul id="room-list" class="list-group"></ul>
+          </div>
+          <div class="card-footer">
+            <form id="create-room-form">
+              <div class="input-group">
+                <input id="room-name-input" type="text" class="form-control" placeholder="Enter new room name" />
+                <button id="create-room-button" class="btn btn-primary" type="submit">
+                  Create Room
+                </button>
+              </div>
+              <p id="validation-message" class="text-danger"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="http://localhost:4000/socket.io/socket.io.js"></script>
   <script>
     const socket = io( 'http://localhost:4000' );
+    const roomList = document.getElementById( "room-list" );
+    const createRoomForm = document.getElementById( "create-room-form" );
+    const createRoomButton = document.getElementById( "create-room-button" );
+    const roomNameInput = document.getElementById( "room-name-input" );
+    const validationMessage = document.getElementById( "validation-message" );
 
-
-    // Selectors
-    const roomsListDiv = document.getElementById( 'rooms-list' );
-    const roomsUl = document.getElementById( 'rooms' );
-    const chatDiv = document.getElementById( 'chat' );
-    const roomNameH2 = document.getElementById( 'room-name' );
-    const messagesDiv = document.getElementById( 'messages' );
-    const messageInput = document.getElementById( 'message-input' );
-    const sendButton = document.getElementById( 'send-button' );
-
-    // Show/hide chat and rooms list
-    function showRooms () {
-      roomsListDiv.style.display = 'block';
-      chatDiv.style.display = 'none';
-    }
-
-    function showChat () {
-      roomsListDiv.style.display = 'none';
-      chatDiv.style.display = 'block';
-    }
-
-    // Event listeners
-    sendButton.addEventListener( 'click', ( e ) => {
+    // Add event listener to create room form
+    createRoomForm.addEventListener( "submit", ( e ) => {
       e.preventDefault();
-      const message = messageInput.value;
-      if ( message ) {
-        socket.emit( 'chat message', message );
-        messageInput.value = '';
+      const roomName = roomNameInput.value;
+      if ( roomName.length < 3 || roomName.length > 10 ) {
+        validationMessage.innerText = "Room name should be between 3 and 10 characters";
+      } else {
+        validationMessage.innerText = "";
+        socket.emit( "createRoom", roomName );
+        roomNameInput.value = "";
       }
     } );
 
-    // Add event listener to receive messages from the server
-    socket.on( 'chat message', ( msg ) => {
-      const messageElement = document.createElement( 'div' );
-      messageElement.innerText = msg;
-      messagesDiv.appendChild( messageElement );
+    // Add event listener to clear validation message when input is changed
+    roomNameInput.addEventListener( "input", () => {
+      if ( validationMessage.innerText ) {
+        validationMessage.innerText = "";
+      }
     } );
 
     // Add event listener to receive rooms from the server
-    socket.on( 'rooms', ( rooms ) => {
+    socket.on( "rooms", ( rooms ) => {
+      roomList.innerHTML = "";
       rooms.forEach( ( room ) => {
-        const roomLi = document.createElement( 'li' );
-        const roomLink = document.createElement( 'a' );
-        roomLink.innerText = room.name;
-        roomLink.href = '#';
-        roomLink.addEventListener( 'click', ( e ) => {
-          e.preventDefault();
-          showChat();
-          roomNameH2.innerText = room.name;
-          socket.emit( 'joinRoom', { roomId: room._id } );
+        const li = document.createElement( "li" );
+        li.classList.add( "list-group-item" );
+        li.innerText = room.name;
+        li.style.cursor = "pointer";
+        li.addEventListener( "click", () => {
+          window.location.href = `chat.html?room=${ room.name }`;
         } );
-        roomLi.appendChild( roomLink );
-        roomsUl.appendChild( roomLi );
+        roomList.appendChild( li );
       } );
     } );
-
-    // On page load
-    showRooms();
   </script>
 </body>
 
