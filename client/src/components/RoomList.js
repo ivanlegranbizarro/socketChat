@@ -39,7 +39,7 @@ function RoomList () {
   useEffect( () => {
     const fetchRooms = async () => {
       try {
-        const response = await fetch( 'http://localhost:4000/rooms' );
+        const response = await fetch( 'http://localhost:4000/api/rooms' );
         const data = await response.json();
         setRooms( data );
       } catch ( error ) {
@@ -57,7 +57,6 @@ function RoomList () {
 
   return (
     <ListContainer>
-      <Typography variant="h5">Available rooms:</Typography>
       {rooms.map( ( room ) => (
         <RoomCard key={room.id} onClick={() => handleRoomClick( room.name )}>
           <CardContent>

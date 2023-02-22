@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import { Button } from '@mui/material';
+import { Button, Card, CardContent } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { io } from 'socket.io-client';
+import RoomList from './RoomList';
 
 const FormContainer = styled( Box )( {
   backgroundColor: '#fff',
   borderRadius: '10px',
   boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
   padding: '10px',
-  width: '50%',
+  width: '100%',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -35,7 +36,6 @@ const FormButton = styled( Button )( {
     backgroundColor: '#1e88e5',
   },
 } );
-
 
 function CreateRooms () {
   const [ socket, setSocket ] = useState( null );
@@ -79,31 +79,36 @@ function CreateRooms () {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-      <FormContainer>
-        <FormTitle variant="h5">Create a new room</FormTitle>
-        <form onSubmit={handleForm}>
-          <FormInput
-            label="Room name"
-            variant="outlined"
-            value={roomName}
-            onChange={handleRoomNameChange}
-            onFocus={handleInputFocus}
-            error={roomNameError.length > 0}
-            helperText={roomNameError}
-          />
-          <FormButton
-            variant="contained"
-            type="submit"
-            endIcon={<SendIcon />}
-          >
-            Create
-          </FormButton>
-        </form>
-      </FormContainer>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Box sx={{ width: '50%', mb: 3 }}>
+        <FormContainer>
+          <FormTitle variant="h5">Create a new room</FormTitle>
+          <form onSubmit={handleForm}>
+            <FormInput
+              label="Room name"
+              variant="outlined"
+              value={roomName}
+              onChange={handleRoomNameChange}
+              onFocus={handleInputFocus}
+              error={roomNameError.length > 0}
+              helperText={roomNameError}
+            />
+            <FormButton variant="contained" type="submit" endIcon={<SendIcon />}>
+              Create
+            </FormButton>
+          </form>
+        </FormContainer>
+      </Box>
+      <Box sx={{ width: '50%', maxWidth: 500 }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h5" sx={{ mb: 2 }}>Available rooms:</Typography>
+            <RoomList />
+          </CardContent>
+        </Card>
+      </Box>
     </Box>
   );
 }
 
 export default CreateRooms;
-
