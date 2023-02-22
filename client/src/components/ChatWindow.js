@@ -45,13 +45,13 @@ const ChatButton = styled( Button )( {
   },
   marginLeft: '15px',
 } );
-
 function ChatWindow () {
   const [ socket, setSocket ] = useState( null );
   const [ message, setMessage ] = useState( '' );
   const [ chat, setChat ] = useState( [] );
   const [ isTyping, setIsTyping ] = useState( false );
   const [ error, setError ] = useState( false );
+  const [ selectedRoom, setSelectedRoom ] = useState( null ); // Variable de estado para la sala seleccionada
 
   let typingTimeout = null;
 
@@ -85,7 +85,8 @@ function ChatWindow () {
   }, [] );
 
   React.useEffect( () => {
-    if ( !socket ) return;
+    if ( !socket || !selectedRoom ) return; // Si no se ha seleccionado una sala, no se debe suscribir a los eventos de socket
+    socket.emit( 'join-room', selectedRoom.name ); // Unirse a la sala
     socket.on( 'response-from-server', ( data ) => {
       setChat( ( prev ) => [ ...prev, data.message ] );
     } );
@@ -97,12 +98,12 @@ function ChatWindow () {
     socket.on( 'typing-stop', () => {
       setIsTyping( false );
     } );
-  }, [ socket ] );
+  }, [ socket, selectedRoom ] );
 
   const handleForm = ( e ) => {
     e.preventDefault();
     if ( message.length > 0 ) {
-      socket.emit( 'send-message', { message } );
+      socket.emit( 'send-message', { message, room: selectedRoom.name } ); // Enviar el mensaje a la sala seleccionada
       setMessage( '' );
       setError( false );
     } else {
@@ -145,7 +146,11 @@ function ChatWindow () {
           </form>
         </Grid>
         <Grid item xs={12} md={6}>
-          <CreateRooms />
+          <CreateRooms
+            socket={socket}
+            selectedRoom={selectedRoom}
+            setSelectedRoom={setSelectedRoom}
+          />
         </Grid>
       </Grid>
     </Box>
@@ -153,3 +158,4 @@ function ChatWindow () {
 }
 
 export default ChatWindow;
+
