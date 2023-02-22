@@ -93,18 +93,19 @@
             console.log( 'response from server', data );
             addMessage( data );
           } );
-
           function addMessage ( data ) {
             const messageClass = data.isCurrentUser ? "bg-primary text-white" : "bg-secondary text-white";
             const messageHTML = `
-                <div class="my message ${ messageClass } p-2 rounded mb-2">
-                  <p class="mb-0">${ data.message }</p>
-                  <p class="mb-0 text-end"><small>${ data.user }</small></p>
-                </div>
-              `;
+    <div class="my message ${ messageClass } p-2 rounded mb-2">
+      <p class="mb-0">${ data.messages[ data.messages.length - 1 ].message }</p>
+      <p class="mb-0 text-end"><small>${ data.messages[ data.messages.length - 1 ].user }</small></p>
+    </div>
+  `;
             messagesContainer.insertAdjacentHTML( "beforeend", messageHTML );
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
           }
+
+
         </script>
         <script>
           function updateRoomTitle () {

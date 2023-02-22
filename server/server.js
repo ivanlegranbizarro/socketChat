@@ -8,6 +8,7 @@ import cors from 'cors';
 import Room from './models/roomModel.js';
 import jwt from 'jsonwebtoken';
 
+
 const app = express();
 
 // middlewares
@@ -39,7 +40,7 @@ io.on( 'connection', async ( socket ) => {
     try {
       const token = socket.handshake.auth.token;
       const decoded = jwt.verify( token, process.env.JWT_SECRET );
-      const user = decoded._id; // Renombramos la propiedad '_id' a 'id'
+      const user = decoded.user;
       const room = await Room.findOne( { name: data.room } );
       if ( room ) {
         room.messages.push( {
