@@ -36,9 +36,11 @@ const FormButton = styled( Button )( {
   },
 } );
 
+
 function CreateRooms () {
   const [ socket, setSocket ] = useState( null );
   const [ roomName, setRoomName ] = useState( '' );
+  const [ roomNameError, setRoomNameError ] = useState( '' );
 
   React.useEffect( () => {
     const newSocket = io( 'http://localhost:4000' );
@@ -48,15 +50,33 @@ function CreateRooms () {
     };
   }, [] );
 
-
   const handleForm = ( e ) => {
     e.preventDefault();
+    if ( roomName.length < 3 ) {
+      setRoomNameError( 'Room name must have at least 3 characters.' );
+      return;
+    }
     if ( socket ) {
       socket.emit( 'createRoom', roomName );
     }
     setRoomName( '' );
+    setRoomNameError( '' );
   };
 
+  const handleInputFocus = () => {
+    setRoomNameError( '' );
+  };
+  const handleRoomNameChange = ( e ) => {
+    const value = e.target.value;
+    setRoomName( value );
+    if ( value.length === 0 ) {
+      setRoomNameError( '' );
+    } else if ( value.length < 3 || value.length > 10 ) {
+      setRoomNameError( 'Room name must be between 3 and 10 characters' );
+    } else {
+      setRoomNameError( '' );
+    }
+  };
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -67,9 +87,16 @@ function CreateRooms () {
             label="Room name"
             variant="outlined"
             value={roomName}
-            onChange={( e ) => setRoomName( e.target.value )}
+            onChange={handleRoomNameChange}
+            onFocus={handleInputFocus}
+            error={roomNameError.length > 0}
+            helperText={roomNameError}
           />
-          <FormButton variant="contained" endIcon={<SendIcon />} type="submit">
+          <FormButton
+            variant="contained"
+            type="submit"
+            endIcon={<SendIcon />}
+          >
             Create
           </FormButton>
         </form>
@@ -79,3 +106,4 @@ function CreateRooms () {
 }
 
 export default CreateRooms;
+
