@@ -31,23 +31,15 @@ function RoomList () {
       setRooms( ( prevRooms ) => [ ...prevRooms, room ] );
     } );
 
+    newSocket.emit( 'getRooms' );
+
+    newSocket.on( 'rooms', ( data ) => {
+      setRooms( data );
+    } );
+
     return () => {
       newSocket.disconnect();
     };
-  }, [] );
-
-  useEffect( () => {
-    const fetchRooms = async () => {
-      try {
-        const response = await fetch( 'http://localhost:4000/api/rooms' );
-        const data = await response.json();
-        setRooms( data );
-      } catch ( error ) {
-        console.log( 'Error fetching rooms:', error );
-      }
-    };
-
-    fetchRooms();
   }, [] );
 
   const handleRoomClick = ( roomName ) => {
