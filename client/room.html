@@ -61,6 +61,7 @@
           const messageForm = document.getElementById( "message-form" );
           const messageInput = document.getElementById( "message-input" );
           const roomName = localStorage.getItem( "roomName" );
+          const user = localStorage.getItem( "user" );
 
 
 
@@ -94,13 +95,18 @@
             addMessage( data );
           } );
           function addMessage ( data ) {
-            const messageClass = data.isCurrentUser ? "bg-primary text-white" : "bg-secondary text-white";
+            const messageClass = data.isCurrentUser ? "background-color: #007bff; color: #fff;" : "background-color: #c1e1c1; color: #000;";
+            const userClass = "color: #000;";
             const messageHTML = `
-    <div class="my message ${ messageClass } p-2 rounded mb-2">
+    <div class="my message p-2 rounded mb-2" style="${ messageClass }">
       <p class="mb-0">${ data.messages[ data.messages.length - 1 ].message }</p>
-      <p class="mb-0 text-end"><small>${ data.messages[ data.messages.length - 1 ].user }</small></p>
+      <div class="d-flex justify-content-end">
+        <small style="${ userClass }">${ user }</small>
+      </div>
     </div>
   `;
+
+
             messagesContainer.insertAdjacentHTML( "beforeend", messageHTML );
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
           }

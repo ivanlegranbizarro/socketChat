@@ -43,6 +43,7 @@
     const loginForm = document.getElementById( "login-form" );
     const emailInput = document.getElementById( "email-input" );
     const passwordInput = document.getElementById( "password-input" );
+    const usersMap = new Map();
 
     loginForm.addEventListener( "submit", async ( event ) => {
       event.preventDefault();
@@ -60,9 +61,13 @@
 
       if ( response.status === 200 ) {
         const data = await response.json();
-        localStorage.setItem( "token", data.data.token );
-        window.location.href = "/chat";
+        const token = data.data.token;
+        const username = data.data.user.name;
 
+        usersMap.set( token, username );
+        localStorage.setItem( "usersMap", JSON.stringify( Array.from( usersMap.entries() ) ) );
+        localStorage.setItem( "token", token );
+        window.location.href = "/chat";
       } else {
         alert( "Invalid email or password. Please try again." );
       }
