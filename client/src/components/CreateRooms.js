@@ -40,11 +40,23 @@ function CreateRooms () {
   const [ socket, setSocket ] = useState( null );
   const [ roomName, setRoomName ] = useState( '' );
 
+  React.useEffect( () => {
+    const newSocket = io( 'http://localhost:4000' );
+    setSocket( newSocket );
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [] );
+
+
   const handleForm = ( e ) => {
     e.preventDefault();
-    socket.emit( 'createRoom', roomName );
+    if ( socket ) {
+      socket.emit( 'createRoom', roomName );
+    }
     setRoomName( '' );
   };
+
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>

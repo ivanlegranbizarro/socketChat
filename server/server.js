@@ -5,6 +5,7 @@ import userRoutes from './routes/userRoutes.js';
 import notFoundRoutes from './routes/NotFound.js';
 import conexion from './db/conexion.js';
 import cors from 'cors';
+import Room from './models/roomModel.js';
 
 const app = express();
 
@@ -16,7 +17,6 @@ app.use( cors( { origin: [ 'http://localhost:3000' ] } ) );
 app.use( '/api/users', userRoutes );
 app.use( notFoundRoutes );
 
-
 const port = process.env.PORT || 4000;
 
 const httpServer = http.createServer( app );
@@ -25,8 +25,6 @@ const io = new Server( httpServer, {
     origin: [ 'http://localhost:3000' ],
   }
 } );
-
-
 
 io.on( 'connection', ( socket ) => {
   socket.on( 'send-message', ( data ) => {
@@ -41,13 +39,20 @@ io.on( 'connection', ( socket ) => {
     socket.broadcast.emit( 'typing-stop' );
   } );
 
+  socket.on( 'createRoom', async ( roomName ) => {
+    try {
+      const room = new Room( { name: roomName } );
+      await room.save();
+      console.log( `Room "${ roomName }" created.` );
+    } catch ( error ) {
+      console.error( error.message );
+    }
+  } );
+
   socket.on( 'disconnect', () => {
     console.log( 'user disconnected' );
   } );
 } );
-
-
-
 
 // connect to database
 conexion();
