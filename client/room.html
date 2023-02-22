@@ -61,10 +61,10 @@
           const messageForm = document.getElementById( "message-form" );
           const messageInput = document.getElementById( "message-input" );
           const roomName = localStorage.getItem( "roomName" );
-          const user = localStorage.getItem( "user" );
 
 
 
+          const usersMap = new Map( JSON.parse( localStorage.getItem( "usersMap" ) ) );
 
           // Join the room and get the room information from the server
           socket.emit( "join-room", roomName, ( room ) => {
@@ -97,15 +97,21 @@
           function addMessage ( data ) {
             const messageClass = data.isCurrentUser ? "background-color: #007bff; color: #fff;" : "background-color: #c1e1c1; color: #000;";
             const userClass = "color: #000;";
+            const token = data.isCurrentUser ? localStorage.getItem( "token" ) : data.token;
+            const username = usersMap.get( token );
+            console.log( 'Token:', token );
+            console.log( 'Users map:', usersMap );
+
+            console.log( 'soy el username', username );
+            console.log( 'hola', usersMap );
             const messageHTML = `
     <div class="my message p-2 rounded mb-2" style="${ messageClass }">
       <p class="mb-0">${ data.messages[ data.messages.length - 1 ].message }</p>
       <div class="d-flex justify-content-end">
-        <small style="${ userClass }">${ user }</small>
+        <small style="${ userClass }">${ username }</small>
       </div>
     </div>
   `;
-
 
             messagesContainer.insertAdjacentHTML( "beforeend", messageHTML );
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
