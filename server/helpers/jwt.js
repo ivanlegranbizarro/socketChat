@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const signToken = ( id, username ) => {
-  return jwt.sign( { user: { id, username } }, process.env.JWT_SECRET, {
+const signToken = ( id ) => {
+  return jwt.sign( { id }, process.env.JWT_SECRET, {
     expiresIn: 3600
   } );
 };

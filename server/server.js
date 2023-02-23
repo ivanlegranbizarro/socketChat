@@ -6,6 +6,7 @@ import notFoundRoutes from './routes/NotFound.js';
 import conexion from './db/conexion.js';
 import cors from 'cors';
 import Room from './models/roomModel.js';
+import User from './models/userModel.js';
 import jwt from 'jsonwebtoken';
 
 const app = express();
@@ -28,75 +29,21 @@ const io = new Server( httpServer, {
 } );
 
 io.on( 'connection', async ( socket ) => {
-  try {
-    const rooms = await Room.find();
-    socket.emit( 'rooms', rooms );
-  } catch ( error ) {
-    console.error( error.message );
-  }
 
-  socket.on( 'join-room', async ( roomName, callback ) => {
-    try {
-      const token = socket.handshake.auth.token;
-      const decoded = jwt.verify( token, process.env.JWT_SECRET );
-      const user = decoded.user;
+  // Broadcast when a user connects
+  socket.broadcast.emit( 'message', 'A user has joined the chat' );
 
-      // Find or create the room with the given name
-      let room = await Room.findOne( { name: roomName } );
-      if ( !room ) {
-        room = new Room( { name: roomName } );
-        await room.save();
-      }
-
-      // Join the user to the room
-      socket.join( room._id, );
-
-      // Send the room data to the user
-      callback( room );
-
-      console.log( `User "${ user.username }" joined room "${ roomName }"` );
-    } catch ( error ) {
-      console.error( error.message );
-    }
-  } );
-
-  socket.on( 'send-message', async ( data ) => {
-    try {
-      const token = socket.handshake.auth.token;
-      const decoded = jwt.verify( token, process.env.JWT_SECRET );
-      const user = decoded.user;
-
-      const room = await Room.findOne( { name: data.room } );
-      if ( room ) {
-        room.messages.push( {
-          user,
-          message: data.message,
-        } );
-        await room.save();
-        console.log( `Message sent to room ${ data.room }` );
-
-        // Emit the message to all clients in the same room
-        io.to( room._id ).emit( 'send-message', {
-          message: data.message,
-          isCurrentUser: false,
-          user
-        } );
-      } else {
-        console.error( `Room ${ data.room } not found.` );
-      }
-    } catch ( error ) {
-      console.error( error.message );
-    }
-  } );
-
+  // Broadcast when a user disconnects
   socket.on( 'disconnect', () => {
-    console.log( 'user disconnected' );
+    io.emit( 'message', 'A user has left the chat' );
   } );
 } );
 
-// connect to database
+
+
+// conectar a la base de datos
 conexion();
 
 httpServer.listen( port, () => {
-  console.log( `Server is running in http://localhost:${ port }` );
+  console.log( ` Server is running in http:;//localhost:${ port }` );
 } );

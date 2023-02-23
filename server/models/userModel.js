@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 
 const userSchema = new mongoose.Schema( {
-  name: {
+  username: {
     type: String,
     required: [ true, 'Username is required' ],
     validate: [ validator.isLength, { min: 3, max: 12, message: 'Username must be between 3 and 12 characters' } ]
