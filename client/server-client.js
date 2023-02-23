@@ -5,29 +5,29 @@ const app = express();
 const server = createServer( app );
 
 app.get( '/', ( req, res ) => {
-  res.sendFile( new URL( 'login.html', import.meta.url ).pathname );
+  res.sendFile( 'login.html', { root: "./" } );
 } );
 
 app.get( '/chat', ( req, res ) => {
-  res.sendFile( new URL( 'index.html', import.meta.url ).pathname );
+  res.sendFile( 'index.html', { root: "./" } );
 } );
 
 app.get( '/room/:name', ( req, res ) => {
-  res.sendFile( new URL( 'room.html', import.meta.url ).pathname );
+  res.sendFile('room.html', { root: "./" } );
 } );
 
+app.get('/register', (req, res) => {
+  res.sendFile('register.html', { root: "./" });
+});
 
-app.get( '/register', ( req, res ) => {
-  res.sendFile( new URL( 'register.html', import.meta.url ).pathname );
-} );
+app.get('/logout', (req, res) => {
+  res.sendFile('login.html', { root: "./" });
+});
 
-app.get( '/logout', ( req, res ) => {
-  res.sendFile( new URL( 'login.html', import.meta.url ).pathname );
-} );
+app.get('*', (req, res) => {
+  res.sendFile('NotFound.html', { root: "./" });
+});
 
-app.get( '*', ( req, res ) => {
-  res.sendFile( new URL( 'NotFound.html', import.meta.url ).pathname );
-} );
 
 
 

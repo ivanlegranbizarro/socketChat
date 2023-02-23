@@ -98,12 +98,8 @@
             const messageClass = data.isCurrentUser ? "background-color: #007bff; color: #fff;" : "background-color: #c1e1c1; color: #000;";
             const userClass = "color: #000;";
             const token = data.isCurrentUser ? localStorage.getItem( "token" ) : data.token;
-            const username = usersMap.get( token );
-            console.log( 'Token:', token );
-            console.log( 'Users map:', usersMap );
+            const username = localStorage.getItem( "username" );
 
-            console.log( 'soy el username', username );
-            console.log( 'hola', usersMap );
             const messageHTML = `
     <div class="my message p-2 rounded mb-2" style="${ messageClass }">
       <p class="mb-0">${ data.messages[ data.messages.length - 1 ].message }</p>
