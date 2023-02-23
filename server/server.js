@@ -45,7 +45,14 @@ io.on( 'connection', async ( socket ) => {
     // Broadcast when a user connects
     socket.broadcast.to( user.room ).emit( 'message', formatMessage( botName, `
     ${ user.username } has joined the chat` ) );
+
+    // Send users and room info
+    io.to( user.room ).emit( 'roomUsers', {
+      room: user.room,
+      users: getRoomUsers( user.room ),
+    } );
   } );
+
 
   // Listen for chatMessage
   socket.on( 'chatMessage', async ( msg ) => {
@@ -59,6 +66,12 @@ io.on( 'connection', async ( socket ) => {
     if ( user ) {
       io.to( user.room ).emit( 'message', formatMessage( botName, `
       ${ user.username } has left the chat` ) );
+
+      // Send users and room info
+      io.to( user.room ).emit( 'roomUsers', {
+        room: user.room,
+        users: getRoomUsers( user.room ),
+      } );
     }
   } );
 } );
