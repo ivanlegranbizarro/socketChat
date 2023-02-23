@@ -37,11 +37,16 @@ io.on( 'connection', async ( socket ) => {
   socket.on( 'disconnect', () => {
     io.emit( 'message', 'A user has left the chat' );
   } );
+
+  // Listen for chatMessage
+  socket.on( 'chatMessage', async ( msg ) => {
+    io.emit( 'message', msg );
+  } );
 } );
 
 
 
-// conectar a la base de datos
+// connect to db
 conexion();
 
 httpServer.listen( port, () => {
