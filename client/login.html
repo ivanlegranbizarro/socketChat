@@ -45,7 +45,6 @@
     const loginForm = document.getElementById( "login-form" );
     const emailInput = document.getElementById( "email-input" );
     const passwordInput = document.getElementById( "password-input" );
-    const usersMap = new Map();
 
     loginForm.addEventListener( "submit", async ( event ) => {
       event.preventDefault();
@@ -67,7 +66,6 @@
         const username = data.data.user.name;
 
         localStorage.setItem( "token", token );
-        localStorage.setItem( "username", username );
         window.location.href = "/chat";
       } else {
         alert( "Invalid email or password. Please try again." );

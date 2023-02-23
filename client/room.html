@@ -87,6 +87,7 @@
               username: localStorage.getItem( "username" )
             };
             socket.emit( "send-message", data );
+            console.log( 'message sent', data );
 
             addMessage( data );
             messageInput.value = "";
@@ -96,32 +97,36 @@
             console.log( 'response from server', data );
             addMessage( data );
           } );
+
           function addMessage ( data ) {
             const messageClass = data.isCurrentUser ? "background-color: #007bff; color: #fff;" : "background-color: #c1e1c1; color: #000;";
             const userClass = "color: #000;";
             const token = data.isCurrentUser ? localStorage.getItem( "token" ) : data.token;
-            const username = data.username;
-
-            //           const messageHTML = `
-            //   <div class="my message p-2 rounded mb-2" style="${ messageClass }">
-            //     <p class="mb-0">${ data.messages[ data.messages.length - 1 ].message }</p>
-            //     <div class="d-flex justify-content-end">
-            //       <small style="${ userClass }">${ username }</small>
-            //     </div>
-            //   </div>
-            // `;
+            const user = data.user;
 
             const messageHTML = `
     <div class="my message p-2 rounded mb-2" style="${ messageClass }">
       <p class="mb-0">${ data.message }</p>
       <div class="d-flex justify-content-end">
-        <small style="${ userClass }">${ username }</small>
+        <small style="${ userClass }">${ data.user }</small>
       </div>
     </div>
   `;
             messagesContainer.insertAdjacentHTML( "beforeend", messageHTML );
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
           }
+          // Debugging instructions
+          socket.on( 'connect', () => {
+            console.log( 'Connected to server' );
+          } );
+
+          socket.on( 'disconnect', () => {
+            console.log( 'Disconnected from server' );
+          } );
+
+          socket.on( 'error', ( error ) => {
+            console.error( 'Socket error', error );
+          } );
 
 
         </script>

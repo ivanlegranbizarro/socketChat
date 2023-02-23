@@ -9,7 +9,7 @@ const userControllers = {
     try {
       const user = await User.create( { name, email, password, passwordConfirmation } );
 
-      const token = signToken( user._id );
+      const token = signToken( user._id, user.name );
 
       res.status( 201 ).json( {
         success: true,
@@ -48,7 +48,7 @@ const userControllers = {
         } );
       }
 
-      const token = signToken( user._id );
+      const token = signToken( user._id, user.name );
 
       res.status( 200 ).json( {
         success: true,

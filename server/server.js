@@ -8,7 +8,6 @@ import cors from 'cors';
 import Room from './models/roomModel.js';
 import jwt from 'jsonwebtoken';
 
-
 const app = express();
 
 // middlewares
@@ -31,16 +30,42 @@ const io = new Server( httpServer, {
 io.on( 'connection', async ( socket ) => {
   try {
     const rooms = await Room.find();
-    io.emit( 'rooms', rooms );
+    socket.emit( 'rooms', rooms );
   } catch ( error ) {
     console.error( error.message );
   }
+
+  socket.on( 'join-room', async ( roomName, callback ) => {
+    try {
+      const token = socket.handshake.auth.token;
+      const decoded = jwt.verify( token, process.env.JWT_SECRET );
+      const user = decoded.user;
+
+      // Find or create the room with the given name
+      let room = await Room.findOne( { name: roomName } );
+      if ( !room ) {
+        room = new Room( { name: roomName } );
+        await room.save();
+      }
+
+      // Join the user to the room
+      socket.join( room._id, );
+
+      // Send the room data to the user
+      callback( room );
+
+      console.log( `User "${ user.username }" joined room "${ roomName }"` );
+    } catch ( error ) {
+      console.error( error.message );
+    }
+  } );
 
   socket.on( 'send-message', async ( data ) => {
     try {
       const token = socket.handshake.auth.token;
       const decoded = jwt.verify( token, process.env.JWT_SECRET );
       const user = decoded.user;
+
       const room = await Room.findOne( { name: data.room } );
       if ( room ) {
         room.messages.push( {
@@ -48,24 +73,17 @@ io.on( 'connection', async ( socket ) => {
           message: data.message,
         } );
         await room.save();
-        console.log( `Message sent to room ${ data }` );
+        console.log( `Message sent to room ${ data.room }` );
+
+        // Emit the message to all clients in the same room
+        io.to( room._id ).emit( 'send-message', {
+          message: data.message,
+          isCurrentUser: false,
+          user
+        } );
       } else {
         console.error( `Room ${ data.room } not found.` );
       }
-    } catch ( error ) {
-      console.error( error.message );
-    }
-  } );
-
-  socket.on( 'createRoom', async ( roomName ) => {
-    try {
-      const room = new Room( { name: roomName } );
-      await room.save();
-      console.log( `Room "${ roomName }" created.` );
-
-      // Emitir las salas disponibles a todos los clientes conectados
-      const rooms = await Room.find();
-      io.emit( 'rooms', rooms );
     } catch ( error ) {
       console.error( error.message );
     }

@@ -5,6 +5,6 @@ Accept: application/json
 {
     "name": "Andrea",
     "email": "andrea@andrea.com",
-    "password": "andreaandrea",
-    "passwordConfirmation": "andreaandrea"
+    "password": "andrea",
+    "passwordConfirmation": "andrea"
 }
