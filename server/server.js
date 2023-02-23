@@ -5,9 +5,11 @@ import userRoutes from './routes/userRoutes.js';
 import notFoundRoutes from './routes/NotFound.js';
 import conexion from './db/conexion.js';
 import cors from 'cors';
+import formatMessage from './helpers/messages.js';
 import Room from './models/roomModel.js';
 import User from './models/userModel.js';
 import jwt from 'jsonwebtoken';
+
 
 const app = express();
 
@@ -28,19 +30,23 @@ const io = new Server( httpServer, {
   },
 } );
 
+const botName = 'ChatCord Bot';
+
 io.on( 'connection', async ( socket ) => {
+  // Welcome current user
+  socket.emit( 'message', formatMessage( botName, 'Welcome to ChatCord!' ) );
 
   // Broadcast when a user connects
-  socket.broadcast.emit( 'message', 'A user has joined the chat' );
+  socket.broadcast.emit( 'message', formatMessage( botName, 'A user has joined the chat' ) );
 
   // Broadcast when a user disconnects
   socket.on( 'disconnect', () => {
-    io.emit( 'message', 'A user has left the chat' );
+    io.emit( 'message', formatMessage( botName, 'A user has left the chat' ) );
   } );
 
   // Listen for chatMessage
   socket.on( 'chatMessage', async ( msg ) => {
-    io.emit( 'message', msg );
+    io.emit( 'message', formatMessage( 'USER', msg ) );
   } );
 } );
 
