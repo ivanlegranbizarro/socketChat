@@ -6,7 +6,11 @@ const { username, room } = Qs.parse( location.search, {
   ignoreQueryPrefix: true,
 } );
 
+
 socket = io.connect( 'http://localhost:4000' );
+// Join chatroom
+socket.emit( 'joinRoom', { username, room } );
+
 // Message from server
 socket.on( 'message', ( message ) => {
   console.log( message );
@@ -42,4 +46,13 @@ const outPutMessage = ( message ) => {
   </p> `;
   document.querySelector( '.chat-messages' ).appendChild( div );
 };
+
+//Prompt the user before leave chat room
+document.getElementById( 'leave-btn' ).addEventListener( 'click', () => {
+  const leaveRoom = confirm( 'Are you sure you want to leave the chatroom?' );
+  if ( leaveRoom ) {
+    window.location = '../index.html';
+  } else {
+  }
+} );
 

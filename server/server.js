@@ -6,6 +6,7 @@ import notFoundRoutes from './routes/NotFound.js';
 import conexion from './db/conexion.js';
 import cors from 'cors';
 import formatMessage from './helpers/messages.js';
+import { userJoin, getCurrentUser, userLeave, getRoomUsers } from './helpers/users.js';
 import Room from './models/roomModel.js';
 import User from './models/userModel.js';
 import jwt from 'jsonwebtoken';
@@ -33,20 +34,32 @@ const io = new Server( httpServer, {
 const botName = 'ChatCord Bot';
 
 io.on( 'connection', async ( socket ) => {
-  // Welcome current user
-  socket.emit( 'message', formatMessage( botName, 'Welcome to ChatCord!' ) );
 
-  // Broadcast when a user connects
-  socket.broadcast.emit( 'message', formatMessage( botName, 'A user has joined the chat' ) );
+  socket.on( 'joinRoom', async ( { username, room } ) => {
+    const user = userJoin( socket.id, username, room );
+    socket.join( user.room );
 
-  // Broadcast when a user disconnects
-  socket.on( 'disconnect', () => {
-    io.emit( 'message', formatMessage( botName, 'A user has left the chat' ) );
+    // Welcome current user
+    socket.emit( 'message', formatMessage( botName, 'Welcome to ChatCord!' ) );
+
+    // Broadcast when a user connects
+    socket.broadcast.to( user.room ).emit( 'message', formatMessage( botName, `
+    ${ user.username } has joined the chat` ) );
   } );
 
   // Listen for chatMessage
   socket.on( 'chatMessage', async ( msg ) => {
-    io.emit( 'message', formatMessage( 'USER', msg ) );
+    const user = await getCurrentUser( socket.id );
+    io.to( user.room ).emit( 'message', formatMessage( user.username, msg ) );
+  } );
+
+  // Broadcast when a user disconnects
+  socket.on( 'disconnect', () => {
+    const user = userLeave( socket.id );
+    if ( user ) {
+      io.to( user.room ).emit( 'message', formatMessage( botName, `
+      ${ user.username } has left the chat` ) );
+    }
   } );
 } );
 
@@ -56,5 +69,5 @@ io.on( 'connection', async ( socket ) => {
 conexion();
 
 httpServer.listen( port, () => {
-  console.log( ` Server is running in http:;//localhost:${ port }` );
+  console.log( ` Server is running in http: ;//localhost:${ port }` );
 } );
