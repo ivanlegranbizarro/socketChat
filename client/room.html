@@ -64,8 +64,6 @@
 
 
 
-          const usersMap = new Map( JSON.parse( localStorage.getItem( "usersMap" ) ) );
-
           // Join the room and get the room information from the server
           socket.emit( "join-room", roomName, ( room ) => {
             console.log( 'room info', room );
@@ -83,14 +81,18 @@
             event.preventDefault();
             const message = messageInput.value;
             console.log( 'sending message', message );
-            socket.emit( "send-message", {
+            data = {
               room: roomName,
-              message: message
-            } );
+              message: message,
+              username: localStorage.getItem( "username" )
+            };
+            socket.emit( "send-message", data );
+
+            addMessage( data );
             messageInput.value = "";
           } );
 
-          socket.on( "response-from-server", ( data ) => {
+          socket.on( "send-message", ( data ) => {
             console.log( 'response from server', data );
             addMessage( data );
           } );
@@ -98,17 +100,25 @@
             const messageClass = data.isCurrentUser ? "background-color: #007bff; color: #fff;" : "background-color: #c1e1c1; color: #000;";
             const userClass = "color: #000;";
             const token = data.isCurrentUser ? localStorage.getItem( "token" ) : data.token;
-            const username = localStorage.getItem( "username" );
+            const username = data.username;
+
+            //           const messageHTML = `
+            //   <div class="my message p-2 rounded mb-2" style="${ messageClass }">
+            //     <p class="mb-0">${ data.messages[ data.messages.length - 1 ].message }</p>
+            //     <div class="d-flex justify-content-end">
+            //       <small style="${ userClass }">${ username }</small>
+            //     </div>
+            //   </div>
+            // `;
 
             const messageHTML = `
     <div class="my message p-2 rounded mb-2" style="${ messageClass }">
-      <p class="mb-0">${ data.messages[ data.messages.length - 1 ].message }</p>
+      <p class="mb-0">${ data.message }</p>
       <div class="d-flex justify-content-end">
         <small style="${ userClass }">${ username }</small>
       </div>
     </div>
   `;
-
             messagesContainer.insertAdjacentHTML( "beforeend", messageHTML );
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
           }

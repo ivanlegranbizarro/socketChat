@@ -48,10 +48,7 @@ io.on( 'connection', async ( socket ) => {
           message: data.message,
         } );
         await room.save();
-        io.emit( 'response-from-server', {
-          room: room.name, // Enviamos el nombre de la sala junto con los mensajes
-          messages: room.messages,
-        } );
+        console.log( `Message sent to room ${ data }` );
       } else {
         console.error( `Room ${ data.room } not found.` );
       }
