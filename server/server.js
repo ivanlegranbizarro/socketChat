@@ -8,7 +8,6 @@ import cors from 'cors';
 import formatMessage from './helpers/messages.js';
 import { userJoin, getCurrentUser, userLeave, getRoomUsers } from './helpers/users.js';
 import Room from './models/roomModel.js';
-import User from './models/userModel.js';
 import jwt from 'jsonwebtoken';
 
 
@@ -34,6 +33,7 @@ const io = new Server( httpServer, {
 const botName = 'ChatCord Bot';
 
 io.on( 'connection', async ( socket ) => {
+  const { token, username } = socket.handshake.auth;
 
   socket.on( 'joinRoom', async ( { username, room } ) => {
     const user = userJoin( socket.id, username, room );

@@ -9,7 +9,13 @@ const { username, room } = Qs.parse( location.search, {
 } );
 
 
-socket = io.connect( 'http://localhost:4000' );
+socket = io.connect( 'http://localhost:4000', {
+  auth: {
+    token: localStorage.getItem( 'token' ),
+    username: localStorage.getItem( 'username' )
+  }
+} );
+
 // Join chatroom
 socket.emit( 'joinRoom', { username, room } );
 
