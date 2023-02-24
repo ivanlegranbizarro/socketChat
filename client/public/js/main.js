@@ -1,3 +1,11 @@
+// Protecting the chat room from unauthorized users
+const token = localStorage.getItem( 'token' );
+
+if ( !token ) {
+  window.location = '../index.html';
+}
+
+
 const chatForm = document.getElementById( 'chat-form' );
 const chatMessages = document.querySelector( '.chat-messages' );
 const roomName = document.getElementById( 'room-name' );

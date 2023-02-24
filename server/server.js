@@ -89,12 +89,6 @@ io.on( 'connection', async ( socket ) => {
         room: user.room,
         users: getRoomUsers( user.room ),
       } );
-
-      // Remove the room from the database if there are no users left in it
-      const roomUsers = getRoomUsers( user.room );
-      if ( roomUsers.length === 0 ) {
-        await Room.findOneAndDelete( { name: user.room } );
-      }
     }
 
   } );
