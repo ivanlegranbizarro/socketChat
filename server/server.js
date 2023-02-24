@@ -33,7 +33,7 @@ const io = new Server( httpServer, {
 const botName = 'ChatCord Bot';
 
 io.on( 'connection', async ( socket ) => {
-  const { token, username } = socket.handshake.auth;
+  const { name } = socket.handshake.auth;
 
   socket.on( 'joinRoom', async ( { username, room } ) => {
     const user = userJoin( socket.id, username, room );
@@ -71,6 +71,7 @@ io.on( 'connection', async ( socket ) => {
     // Add the message to the room's messages array
     const messageObject = {
       user: user._id,
+      name: name,
       message: msg
     };
     roomObject.messages.push( messageObject );
@@ -90,7 +91,7 @@ io.on( 'connection', async ( socket ) => {
       } );
 
       // Remove the room from the database if there are no users left in it
-      const roomUsers = await getRoomUsers( user.room );
+      const roomUsers = getRoomUsers( user.room );
       if ( roomUsers.length === 0 ) {
         await Room.findOneAndDelete( { name: user.room } );
       }
