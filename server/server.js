@@ -39,6 +39,13 @@ io.on( 'connection', async ( socket ) => {
     const user = userJoin( socket.id, username, room );
     socket.join( user.room );
 
+    // Create a new room if it doesn't exist
+    let roomObject = await Room.findOne( { name: user.room } );
+    if ( !roomObject ) {
+      roomObject = new Room( { name: user.room, messages: [] } );
+      await roomObject.save();
+    }
+
     // Welcome current user
     socket.emit( 'message', formatMessage( botName, 'Welcome to ChatCord!' ) );
 
@@ -57,30 +64,44 @@ io.on( 'connection', async ( socket ) => {
   // Listen for chatMessage
   socket.on( 'chatMessage', async ( msg ) => {
     const user = await getCurrentUser( socket.id );
+
+    // Find the room for the current user
+    const roomObject = await Room.findOne( { name: user.room } );
+
+    // Add the message to the room's messages array
+    const messageObject = {
+      user: user._id,
+      message: msg
+    };
+    roomObject.messages.push( messageObject );
+    await roomObject.save();
+
     io.to( user.room ).emit( 'message', formatMessage( user.username, msg ) );
   } );
-
   // Broadcast when a user disconnects
-  socket.on( 'disconnect', () => {
+  socket.on( 'disconnect', async () => {
     const user = userLeave( socket.id );
     if ( user ) {
-      io.to( user.room ).emit( 'message', formatMessage( botName, `
-      ${ user.username } has left the chat` ) );
-
+      io.to( user.room ).emit( 'message', formatMessage( botName, ` ${ user.username } has left the chat` ) );
       // Send users and room info
       io.to( user.room ).emit( 'roomUsers', {
         room: user.room,
         users: getRoomUsers( user.room ),
       } );
+
+      // Remove the room from the database if there are no users left in it
+      const roomUsers = await getRoomUsers( user.room );
+      if ( roomUsers.length === 0 ) {
+        await Room.findOneAndDelete( { name: user.room } );
+      }
     }
+
   } );
 } );
-
-
 
 // connect to db
 conexion();
 
 httpServer.listen( port, () => {
-  console.log( ` Server is running in http: ;//localhost:${ port }` );
+  console.log( `Server is running in http://localhost:${ port }` );
 } );
