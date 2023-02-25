@@ -8,7 +8,6 @@ import cors from 'cors';
 import formatMessage from './helpers/messages.js';
 import { userJoin, getCurrentUser, userLeave, getRoomUsers } from './helpers/users.js';
 import Room from './models/roomModel.js';
-import jwt from 'jsonwebtoken';
 
 
 const app = express();
@@ -34,6 +33,11 @@ const botName = 'ChatCord Bot';
 
 io.on( 'connection', async ( socket ) => {
   const { name } = socket.handshake.auth;
+
+  // send channel list to the client
+  const channels = await Room.find( {}, 'name' );
+  socket.emit( 'channelList', channels );
+
 
   socket.on( 'joinRoom', async ( { username, room } ) => {
     const user = userJoin( socket.id, username, room );
