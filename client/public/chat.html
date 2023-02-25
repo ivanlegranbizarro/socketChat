@@ -17,9 +17,11 @@
     <div class="row">
       <div class="col-3">
         <div class="card">
-          <div class="card-header">
-            <h5><i class="bi bi-door-open-fill"></i></i> Room Name:</h5>
-            <h6 id="room-name"></h6>
+          <div class="card-header room-list">
+            <h5><i class="bi bi-door-open-fill"></i></i> Rooms:</h5>
+            <ul id="rooms" class="list-unstyled">
+              <!-- Rooms will be added dynamically here -->
+            </ul>
           </div>
           <div class="card-body">
             <h5><i class="bi bi-people-fill"></i></i> Users</h5>
@@ -31,7 +33,7 @@
         <div class="card">
           <div class="card-header">
             <h5><i class="fas fa-smile"></i> ChatCord</h5>
-            <button id="leave-btn" class="btn btn-primary">Leave Room</button>
+            <button id="leave-btn" class="btn btn-primary">Leave Chat</button>
           </div>
           <div class="card-body chat-messages" style="height: 400px; overflow-y: auto;">
             <div class="message">

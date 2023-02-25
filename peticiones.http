@@ -3,8 +3,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "username": "Ernesto",
-    "email": "ernesto@ernesto.com",
-    "password": "ernesto",
-    "passwordConfirmation": "ernesto"
+    "username": "Merche",
+    "email": "merche@merche.com",
+    "password": "merche",
+    "passwordConfirmation": "merche"
 }
