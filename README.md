@@ -1,7 +1,7 @@
 TODO: Añadir una descripción del proyecto, funcionalidades y eventos con los sockets
 # Nombre del proyecto
 
-Este es un proyecto de chat dividido en dos partes: el lado del cliente, desarrollado con REACT y Javascript, y el lado del servidor, desarrollado con Node y Express.
+Este es un proyecto de chat dividido en dos partes: el lado del cliente, desarrollado con Bootstrap y Javascript, y el lado del servidor, desarrollado con Node y Express.
 
 ## Instalación
 
@@ -35,5 +35,3 @@ Estos son los endpoints disponibles en la API Rest del servidor:
 | ------ | -------- | ----------- |
 | POST   | /signup  | Registra un nuevo usuario |
 | POST   | /login   | Inicia sesión con un usuario registrado |
-| GET    | /logout  | Cierra la sesión del usuario |
-| GET    | /verify  | Verifica si el usuario tiene una sesión activa |
