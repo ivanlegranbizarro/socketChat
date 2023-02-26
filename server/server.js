@@ -29,7 +29,7 @@ const io = new Server( httpServer, {
   },
 } );
 
-const botName = 'ChatCord Bot';
+const botName = 'SocketChat Bot';
 
 // Default chat rooms
 const defaultRooms = [ 'Literatura', 'Programación' ];
@@ -65,7 +65,7 @@ io.on( 'connection', async ( socket ) => {
     }
 
     // Welcome current user
-    socket.emit( 'message', formatMessage( botName, 'Welcome to ChatCord!' ) );
+    socket.emit( 'message', formatMessage( botName, 'Welcome to SocketChat!' ) );
 
     // Broadcast when a user connects
     socket.broadcast.to( user.room ).emit( 'message', formatMessage( botName, `
