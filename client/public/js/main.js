@@ -58,16 +58,18 @@ chatForm.addEventListener( 'submit', ( e ) => {
 } );
 
 // Output message to DOM
-
 const outPutMessage = ( message ) => {
   const div = document.createElement( 'div' );
-  div.classList.add( 'message' );
-  div.innerHTML = ` <p>${ message.username } <span>${ message.time }</span></p>
-  <p class="text">
-    ${ message.text }
-  </p> `;
-  document.querySelector( '.chat-messages' ).appendChild( div );
+  div.classList.add( 'card', 'mb-2' );
+  div.innerHTML = `
+    <div class="card-body p-2" style="background-color: ${ message.username === username ? 'rgba(0, 123, 255, 0.4)' : 'rgba(40, 167, 69, 0.4)' };">
+      <h5 class="card-title m-0">${ message.username } <small class="text-muted">${ message.time }</small></h5>
+      <p class="card-text mb-0">${ message.text }</p>
+    </div>
+  `;
+  chatMessages.appendChild( div );
 };
+
 
 //Prompt the user before leave chat room
 document.getElementById( 'leave-btn' ).addEventListener( 'click', () => {
