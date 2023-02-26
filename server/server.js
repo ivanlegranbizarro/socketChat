@@ -94,7 +94,7 @@ io.on( 'connection', async ( socket ) => {
         users: getRoomUsers( user.room ),
       } );
       // Broadcast message to other users
-      socket.broadcast.to( user.room ).emit( 'message', formatMessage( botName, `${ user.username } has left the chat` ) );
+      socket.broadcast.to( user.room ).emit( 'message', formatMessage( botName, `${ user.username } has left the room` ) );
     }
   } );
 

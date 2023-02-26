@@ -11,7 +11,7 @@ const roomName = document.getElementById( 'room-name' );
 const userList = document.getElementById( 'users' );
 
 // Get username and room from URL
-const { username, room } = Qs.parse( location.search, {
+let { username, room } = Qs.parse( location.search, {
   ignoreQueryPrefix: true,
 } );
 
@@ -87,7 +87,7 @@ socket.on( 'channelList', ( rooms ) => {
   rooms.forEach( ( room ) => {
     const li = document.createElement( 'li' );
     const link = document.createElement( 'a' );
-    link.href = `?room=${ room.name }`;
+    link.href = `chat.html?username=${ username }&room=${ room.name }`;
     link.innerText = room.name;
     link.classList.add( 'btn', 'btn-link', 'text-dark', 'room-link' );
     li.appendChild( link );
