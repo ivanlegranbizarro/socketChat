@@ -31,6 +31,19 @@ const io = new Server( httpServer, {
 
 const botName = 'ChatCord Bot';
 
+// Default chat rooms
+const defaultRooms = [ 'Literatura', 'Programación' ];
+
+defaultRooms.forEach( async ( roomName ) => {
+  let roomObject = await Room.findOne( { name: roomName } );
+  if ( !roomObject ) {
+    roomObject = new Room( { name: roomName, messages: [] } );
+    await roomObject.save();
+    io.emit( 'newRoom', { name: roomName } );
+  }
+} );
+
+
 io.on( 'connection', async ( socket ) => {
   const { name } = socket.handshake.auth;
 
