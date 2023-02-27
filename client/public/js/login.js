@@ -2,6 +2,7 @@ const loginForm = document.getElementById( 'login-form' );
 const displayErrors = document.getElementById( 'display-errors' );
 const roomSelect = document.getElementById( 'room' );
 
+
 // Connect to socket.io server and get the list of channels
 const socket = io( 'http://localhost:4000' );
 

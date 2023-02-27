@@ -58,9 +58,8 @@ async function socketMain ( httpServer ) {
       socket.broadcast.to( user.room ).emit( 'message', formatMessage( botName, `
       ${ user.username } has joined the chat` ) );
 
-      // Send users and room info
+      // Send users info
       io.to( user.room ).emit( 'roomUsers', {
-        room: user.room,
         users: getRoomUsers( user.room ),
       } );
     } );
@@ -91,7 +90,6 @@ async function socketMain ( httpServer ) {
         socket.leave( user.room );
         // Send users and room info
         io.to( user.room ).emit( 'roomUsers', {
-          room: user.room,
           users: getRoomUsers( user.room ),
         } );
         // Broadcast message to other users
@@ -107,7 +105,6 @@ async function socketMain ( httpServer ) {
         io.to( user.room ).emit( 'message', formatMessage( botName, ` ${ user.username } has left the chat` ) );
         // Send users and room info
         io.to( user.room ).emit( 'roomUsers', {
-          room: user.room,
           users: getRoomUsers( user.room ),
         } );
       }

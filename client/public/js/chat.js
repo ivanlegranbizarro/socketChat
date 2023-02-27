@@ -99,6 +99,9 @@ socket.on( 'channelList', ( rooms ) => {
   rooms.forEach( ( room ) => {
     const li = document.createElement( 'li' );
     const link = document.createElement( 'a' );
+    link.addEventListener('click', () => {
+      socket.emit( 'leaveRoom' );
+    })
     link.href = `chat.html?username=${ username }&room=${ room.name }`;
     link.innerText = room.name;
     link.classList.add( 'btn', 'btn-link', 'text-dark', 'room-link' );
@@ -113,16 +116,6 @@ socket.on( 'channelList', ( rooms ) => {
     }
   } );
 } );
-
-// Add event listener to room links
-const roomLinks = document.querySelectorAll( '.room-link' );
-roomLinks.forEach( link => {
-  link.addEventListener( 'click', () => {
-    socket.emit( 'leaveRoom' );
-  } );
-} );
-
-
 
 
 // Add users to DOM
