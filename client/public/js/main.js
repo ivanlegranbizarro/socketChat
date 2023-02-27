@@ -33,6 +33,16 @@ socket.on( 'roomUsers', ( { users } ) => {
   outputUsers( users );
 } );
 
+// Get last 20 messages when joining a room
+socket.on( 'roomMessages', ( messages ) => {
+  messages.forEach( message => {
+    outPutMessage( message );
+  } );
+
+  // Scroll down the chat
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+} );
+
 // Message from server
 socket.on( 'message', ( message ) => {
   console.log( message );

@@ -67,6 +67,12 @@ io.on( 'connection', async ( socket ) => {
     // Welcome current user
     socket.emit( 'message', formatMessage( botName, 'Welcome to SocketChat!' ) );
 
+    // Get last 20 messages from the database and format them
+    const messages = roomObject.messages.slice( -20 ).map( msg => formatMessage( msg.name, msg.message, msg.timestamp ) );
+
+    socket.emit( 'roomMessages', messages );
+
+
     // Broadcast when a user connects
     socket.broadcast.to( user.room ).emit( 'message', formatMessage( botName, `
     ${ user.username } has joined the chat` ) );
