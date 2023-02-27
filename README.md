@@ -18,12 +18,12 @@ Para ejecutar el proyecto, sigue estos pasos:
 
 ### Cliente
 
-1. Abre una terminal y dirígete a la carpeta correspondiente al cliente (`/cliente`)
+1. Abre una terminal y dirígete a la carpeta correspondiente al cliente (`/client`)
 2. Ejecuta `npm run dev`
 
 ### Servidor
 
-1. Abre una terminal y dirígete a la carpeta correspondiente al servidor (`/servidor`)
+1. Abre una terminal y dirígete a la carpeta correspondiente al servidor (`/server`)
 2. Ejecuta `npm run dev`
 
 ## Endpoints de la API
