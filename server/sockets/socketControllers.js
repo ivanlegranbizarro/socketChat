@@ -32,9 +32,6 @@ async function socketMain ( httpServer ) {
     const channels = await Room.find( {}, 'name' );
     socket.emit( 'channelList', channels );
 
-    // Initialize message counter to 0
-    let messageCounter = 0;
-
     socket.on( 'joinRoom', async ( { username, room } ) => {
       const user = userJoin( socket.id, username, room );
       socket.join( user.room );
@@ -74,25 +71,17 @@ async function socketMain ( httpServer ) {
       // Find the room for the current user
       const roomObject = await Room.findOne( { name: user.room } );
 
-
-      // Increment message counter
-      messageCounter++;
-
       // Add the message to the room's messages array
-      if ( messageCounter === 5 ) {
-        const messageObject = {
-          user: user._id,
-          name: name,
-          message: msg,
-        };
-        roomObject.messages.push( messageObject );
-        await roomObject.save();
-        messageCounter = 0;
-      }
+      const messageObject = {
+        user: user._id,
+        name: name,
+        message: msg,
+      };
+      roomObject.messages.push( messageObject );
+      await roomObject.save();
 
       io.to( user.room ).emit( 'message', formatMessage( name, msg ) );
     } );
-
 
     // Listen for leaveRoom event
     socket.on( 'leaveRoom', async () => {
