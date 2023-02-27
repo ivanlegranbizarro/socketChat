@@ -1,4 +1,4 @@
-# socketChat | Fin Sprint5 It Academy Node JS
+# socketChat | Sprint5 | It Academy Node JS
 
 Este es un proyecto de chat dividido en dos partes: el lado del cliente, desarrollado con Bootstrap y Javascript, y el lado del servidor, desarrollado con Node y Express.
 
