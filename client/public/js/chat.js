@@ -2,7 +2,7 @@
 const token = localStorage.getItem( 'token' );
 
 if ( !token ) {
-  window.location = '../login.html';
+  window.location = '../index.html';
 }
 
 const chatForm = document.getElementById( 'chat-form' );
@@ -85,7 +85,7 @@ const outPutMessage = ( message ) => {
 document.getElementById( 'leave-btn' ).addEventListener( 'click', () => {
   const leaveChat = confirm( 'Are you sure you want to leave the chatroom?' );
   if ( leaveChat ) {
-    window.location = '../login.html';
+    window.location = '../index.html';
     localStorage.removeItem( 'token' );
   } else {
   }
