@@ -26,7 +26,6 @@ async function socketMain ( httpServer ) {
 
   // Run when client connects
   io.on( 'connection', async ( socket ) => {
-    const { name } = socket.handshake.auth;
 
     // Send channel list to the client
     const channels = await Room.find( {}, 'name' );
@@ -90,7 +89,7 @@ async function socketMain ( httpServer ) {
         await roomObject.save();
       }
 
-      io.to( user.room ).emit( 'message', formatMessage( name, msg ) );
+      io.to( user.room ).emit( 'message', formatMessage( user.username, msg ) );
     } );
 
     // Listen for leaveRoom event

@@ -21,7 +21,6 @@ let currentRoom = room;
 socket = io.connect( 'http://localhost:4000', {
   auth: {
     token: localStorage.getItem( 'token' ),
-    name: localStorage.getItem( 'username' )
   }
 } );
 
