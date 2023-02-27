@@ -26,7 +26,7 @@ registerForm.addEventListener( 'submit', ( e ) => {
   const username = document.getElementById( 'username' ).value;
   const email = document.getElementById( 'email' ).value;
   const password = document.getElementById( 'password' ).value;
-  const passwordConfirmation = document.getElementById( 'password-confirm' ).value;
+  const passwordConfirmation = document.getElementById( 'passwordConfirmation' ).value;
   const room = document.getElementById( 'room' ).value;
 
   // Perform client-side validation
