@@ -31,6 +31,7 @@ async function socketMain ( httpServer ) {
     // Send channel list to the client
     const channels = await Room.find( {}, 'name' );
     socket.emit( 'channelList', channels );
+    
 
     socket.on( 'joinRoom', async ( { username, room } ) => {
       const user = userJoin( socket.id, username, room );
