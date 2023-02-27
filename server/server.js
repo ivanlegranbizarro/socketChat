@@ -70,6 +70,7 @@ io.on( 'connection', async ( socket ) => {
     // Get last 20 messages from the database and format them
     const messages = roomObject.messages.slice( -20 ).map( msg => formatMessage( msg.name, msg.message, msg.timestamp ) );
 
+    // Send the last 20 messages to the client
     socket.emit( 'roomMessages', messages );
 
 
