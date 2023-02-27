@@ -10,7 +10,7 @@ Para instalar el proyecto, sigue estos pasos:
 2. Abre una terminal y dirígete a la carpeta correspondiente al cliente (`/client`) o al servidor (`/server`)
 3. Ejecuta `npm install`
 
-Repite el proceso en ambas carpetas (`/client` y `/server`).
+Repite el proceso para la otra carpeta hasta que ambas partes del proyecto tengan sus dependencias instaladas.
 
 ## Ejecución
 
