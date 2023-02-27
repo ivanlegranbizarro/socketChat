@@ -1,6 +1,5 @@
 import express from 'express';
 import http from 'http';
-import { Server } from 'socket.io';
 import userRoutes from './routes/userRoutes.js';
 import notFoundRoutes from './routes/NotFound.js';
 import conexion from './db/conexion.js';
