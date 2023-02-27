@@ -18,7 +18,7 @@ async function socketMain ( httpServer ) {
   defaultRooms.forEach( async ( roomName ) => {
     let roomObject = await Room.findOne( { name: roomName } );
     if ( !roomObject ) {
-      roomObject = new Room( { name: roomName, messages: [], messageCount: 0 } );
+      roomObject = new Room( { name: roomName, messages: [] } );
       await roomObject.save();
       io.emit( 'newRoom', { name: roomName } );
     }
@@ -40,7 +40,7 @@ async function socketMain ( httpServer ) {
       // Create a new room if it doesn't exist
       let roomObject = await Room.findOne( { name: user.room } );
       if ( !roomObject ) {
-        roomObject = new Room( { name: user.room, messages: [], messageCount: 0 } );
+        roomObject = new Room( { name: user.room, messages: [] } );
         await roomObject.save();
         channels.push( { name: roomObject.name } );
         io.emit( 'channelList', channels );
@@ -69,8 +69,8 @@ async function socketMain ( httpServer ) {
     socket.on( 'chatMessage', async ( msg ) => {
       const user = await getCurrentUser( socket.id );
 
-      let roomObject = await Room.findOne( { name: user.room } );
-      roomObject.messageCount++;
+      // Find the room for the current user
+      const roomObject = await Room.findOne( { name: user.room } );
 
       // Add the message to the room's messages array
       const messageObject = {
@@ -79,12 +79,7 @@ async function socketMain ( httpServer ) {
         message: msg,
       };
       roomObject.messages.push( messageObject );
-
-      // Save the room to the database when messageCount reaches 5 or more
-      if ( roomObject.messageCount >= 5 ) {
-        await roomObject.save();
-        roomObject.messageCount = 0;
-      }
+      await roomObject.save();
 
       io.to( user.room ).emit( 'message', formatMessage( name, msg ) );
     } );
@@ -119,3 +114,4 @@ async function socketMain ( httpServer ) {
 }
 
 export default socketMain;
+
