@@ -79,7 +79,7 @@ async function socketMain ( httpServer ) {
       messageCounter++;
 
       // Add the message to the room's messages array
-      if ( messageCounter === 20 ) {
+      if ( messageCounter === 5 ) {
         const messageObject = {
           user: user._id,
           name: name,
