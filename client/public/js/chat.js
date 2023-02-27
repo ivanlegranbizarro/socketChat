@@ -28,7 +28,7 @@ socket = io.connect( 'http://localhost:4000', {
 // Join chatroom
 socket.emit( 'joinRoom', { username, room } );
 
-// Get room and users
+// Get room of users
 socket.on( 'roomUsers', ( { users } ) => {
   outputUsers( users );
 } );
@@ -87,7 +87,6 @@ document.getElementById( 'leave-btn' ).addEventListener( 'click', () => {
   if ( leaveChat ) {
     window.location = '../index.html';
     localStorage.removeItem( 'token' );
-  } else {
   }
 } );
 
@@ -99,9 +98,9 @@ socket.on( 'channelList', ( rooms ) => {
   rooms.forEach( ( room ) => {
     const li = document.createElement( 'li' );
     const link = document.createElement( 'a' );
-    link.addEventListener('click', () => {
+    link.addEventListener( 'click', () => {
       socket.emit( 'leaveRoom' );
-    })
+    } );
     link.href = `chat.html?username=${ username }&room=${ room.name }`;
     link.innerText = room.name;
     link.classList.add( 'btn', 'btn-link', 'text-dark', 'room-link' );
