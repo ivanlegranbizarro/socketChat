@@ -65,6 +65,8 @@ async function socketMain ( httpServer ) {
     } );
 
     // Listen for chatMessage
+    let messageQueue = 0;
+
     socket.on( 'chatMessage', async ( msg ) => {
       const user = await getCurrentUser( socket.id );
 
@@ -77,8 +79,14 @@ async function socketMain ( httpServer ) {
         name: name,
         message: msg,
       };
+
       roomObject.messages.push( messageObject );
-      await roomObject.save();
+      messageQueue += 1;
+      if ( messageQueue === 5 ) {
+        await roomObject.save();
+        messageQueue = 0;
+      }
+
 
       io.to( user.room ).emit( 'message', formatMessage( name, msg ) );
     } );
