@@ -65,10 +65,10 @@ async function socketMain ( httpServer ) {
       } );
     } );
 
+    // Listen for chatMessage
     let counter = 0;
     let temporaryMessages = [];
 
-    // Listen for chatMessage
     socket.on( 'chatMessage', async ( msg ) => {
       const user = await getCurrentUser( socket.id );
 
