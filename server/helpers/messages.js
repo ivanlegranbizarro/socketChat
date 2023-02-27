@@ -1,5 +1,6 @@
 import moment from 'moment'
 
+// Format messages
 const formatMessage = ( username, text ) => {
   return {
     username,

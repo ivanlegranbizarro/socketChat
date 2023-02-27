@@ -44,10 +44,11 @@ defaultRooms.forEach( async ( roomName ) => {
 } );
 
 
+// Run when client connects
 io.on( 'connection', async ( socket ) => {
   const { name } = socket.handshake.auth;
 
-  // send channel list to the client
+  // Send channel list to the client
   const channels = await Room.find( {}, 'name' );
   socket.emit( 'channelList', channels );
 
