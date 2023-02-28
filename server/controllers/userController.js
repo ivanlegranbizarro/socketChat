@@ -7,6 +7,15 @@ const userControllers = {
     const { username, email, password, passwordConfirmation } = req.body;
 
     try {
+      const userExist = await User.findOne( { $or: [ { username }, { email } ] } );
+
+      if ( userExist ) {
+        return res.status( 400 ).json( {
+          success: false,
+          message: 'User already exists'
+        } );
+      }
+
       const user = await User.create( { username, email, password, passwordConfirmation } );
 
       const token = signToken( user._id );
