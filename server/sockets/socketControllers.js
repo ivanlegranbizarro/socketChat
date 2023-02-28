@@ -15,6 +15,9 @@ async function socketMain ( httpServer ) {
 
   // Run when client connects
   io.on( 'connection', async ( socket ) => {
+    if ( !socket.handshake.auth.token ) {
+      return socket.disconnect( true );
+    }
 
     // Send channel list to the client
     const channels = await Room.find( {}, 'name' );
