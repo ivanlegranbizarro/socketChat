@@ -137,10 +137,9 @@ createRoomForm.addEventListener( 'submit', ( e ) => {
 } );
 
 // Add users to DOM
+// Add users to DOM
 const outputUsers = ( users ) => {
   userList.innerHTML = `
-    ${ users.map( ( user ) => `<li>${ user.username }</li>` ).join( '' ) }
+    ${ users.map( ( user ) => `<li class="${ user.username === username ? 'text-success' : '' }">${ user.username }</li>` ).join( '' ) }
   `;
 };
-
-
