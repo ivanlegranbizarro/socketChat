@@ -24,6 +24,7 @@ async function socketMain ( httpServer ) {
     socket.emit( 'channelList', channels );
 
 
+    // Listen for joinRoom event
     socket.on( 'joinRoom', async ( { username, room } ) => {
       const user = userJoin( socket.id, username, room );
       socket.join( user.room );
