@@ -54,8 +54,6 @@ async function socketMain ( httpServer ) {
     } );
 
     // Listen for chatMessage
-    let counter = 0;
-    let temporaryMessages = [];
 
     socket.on( 'chatMessage', async ( msg ) => {
       const user = await getCurrentUser( socket.id );
@@ -69,14 +67,10 @@ async function socketMain ( httpServer ) {
         name: user.username,
         message: msg,
       };
-      temporaryMessages.push( messageObject );
 
-      counter += 1;
-      if ( counter === 5 ) {
-        counter = 0;
-        roomObject.messages.push( ...temporaryMessages );
-        await roomObject.save();
-      }
+      roomObject.messages.push( messageObject );
+      await roomObject.save();
+
 
       io.to( user.room ).emit( 'message', formatMessage( user.username, msg ) );
     } );
