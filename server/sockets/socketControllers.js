@@ -13,18 +13,6 @@ async function socketMain ( httpServer ) {
     },
   } );
 
-  // Default chat rooms
-  const defaultRooms = [ 'Literatura', 'Programación' ];
-
-  defaultRooms.forEach( async ( roomName ) => {
-    let roomObject = await Room.findOne( { name: roomName } );
-    if ( !roomObject ) {
-      roomObject = new Room( { name: roomName, messages: [] } );
-      await roomObject.save();
-      io.emit( 'newRoom', { name: roomName } );
-    }
-  } );
-
   // Run when client connects
   io.on( 'connection', async ( socket ) => {
 
