@@ -5,6 +5,7 @@ import Room from '../models/roomModel.js';
 
 const botName = 'SocketChat Bot';
 
+// Socket.io server
 async function socketMain ( httpServer ) {
   const io = new Server( httpServer, {
     cors: {
