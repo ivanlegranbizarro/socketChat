@@ -56,6 +56,33 @@ async function socketMain ( httpServer ) {
       } );
     } );
 
+    // Listen for createRoom event
+    socket.on( 'createRoom', async ( newRoomName, callback ) => {
+      try {
+        // Check if the room already exists
+        const existingRoom = await Room.findOne( { name: newRoomName } );
+        if ( existingRoom ) {
+          callback( { success: false, error: 'The room already exists' } );
+          return;
+        }
+
+        // Create a new room
+        const newRoom = new Room( { name: newRoomName, messages: [] } );
+        await newRoom.save();
+
+        // Send success response to client
+        callback( { success: true } );
+
+        // Update the list of channels for all clients
+        const channels = await Room.find( {}, 'name' );
+        io.emit( 'channelList', channels );
+      } catch ( err ) {
+        console.error( err );
+        callback( { success: false, error: 'An error occurred while creating the room' } );
+      }
+    } );
+
+
     // Listen for chatMessage
 
     socket.on( 'chatMessage', async ( msg ) => {

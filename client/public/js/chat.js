@@ -9,6 +9,8 @@ const chatForm = document.getElementById( 'chat-form' );
 const chatMessages = document.querySelector( '.chat-messages' );
 const roomName = document.getElementById( 'room-name' );
 const userList = document.getElementById( 'users' );
+const createRoomForm = document.getElementById( 'create-room-form' );
+const roomList = document.getElementById( 'rooms' );
 
 // Get username and room from URL
 let { username, room } = Qs.parse( location.search, {
@@ -17,11 +19,10 @@ let { username, room } = Qs.parse( location.search, {
 
 let currentRoom = room;
 
-
 socket = io.connect( 'http://localhost:4000', {
   auth: {
     token: localStorage.getItem( 'token' ),
-  }
+  },
 } );
 
 // Join chatroom
@@ -34,7 +35,7 @@ socket.on( 'roomUsers', ( { users } ) => {
 
 // Get last 20 messages when joining a room
 socket.on( 'roomMessages', ( messages ) => {
-  messages.forEach( message => {
+  messages.forEach( ( message ) => {
     outPutMessage( message );
   } );
 
@@ -71,14 +72,14 @@ const outPutMessage = ( message ) => {
   const div = document.createElement( 'div' );
   div.classList.add( 'card', 'mb-2' );
   div.innerHTML = `
-    <div class="card-body p-2" style="background-color: ${ message.username === username ? 'rgba(0, 123, 255, 0.4)' : 'rgba(40, 167, 69, 0.4)' };">
+    <div class="card-body p-2" style="background-color: ${ message.username === username ? 'rgba(0, 123, 255, 0.4)' : 'rgba(40, 167, 69, 0.4)'
+    };">
       <h5 class="card-title m-0">${ message.username } <small class="text-muted">${ message.time }</small></h5>
       <p class="card-text mb-0">${ message.text }</p>
     </div>
   `;
   chatMessages.appendChild( div );
 };
-
 
 //Prompt the user before leave chat room
 document.getElementById( 'leave-btn' ).addEventListener( 'click', () => {
@@ -91,7 +92,6 @@ document.getElementById( 'leave-btn' ).addEventListener( 'click', () => {
 
 // Load rooms from db
 socket.on( 'channelList', ( rooms ) => {
-  const roomList = document.getElementById( 'rooms' );
   roomList.innerHTML = '';
 
   rooms.forEach( ( room ) => {
@@ -109,12 +109,32 @@ socket.on( 'channelList', ( rooms ) => {
     // Add active class to current room
     if ( room.name === currentRoom ) {
       link.classList.add( 'fw-bold' );
-      link.classList.remove( 'text-dark' );
+      link.classList.remove = 'text-dark';
       link.classList.add( 'text-success' );
     }
   } );
 } );
 
+// Create a new room
+createRoomForm.addEventListener( 'submit', ( e ) => {
+  e.preventDefault();
+
+  const roomNameInput = document.getElementById( 'room-name-input' );
+  const newRoomName = roomNameInput.value;
+
+  // Emit new room to server
+  socket.emit( 'createRoom', newRoomName, ( response ) => {
+    if ( response.success ) {
+      // Clear room name input
+      roomNameInput.value = '';
+
+      // Refresh room list
+      socket.emit( 'getChannels' );
+    } else {
+      alert( response.error );
+    }
+  } );
+} );
 
 // Add users to DOM
 const outputUsers = ( users ) => {
@@ -122,3 +142,5 @@ const outputUsers = ( users ) => {
     ${ users.map( ( user ) => `<li>${ user.username }</li>` ).join( '' ) }
   `;
 };
+
+
