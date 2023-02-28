@@ -74,8 +74,8 @@ const outPutMessage = ( message ) => {
   div.innerHTML = `
     <div class="card-body p-2 text-${ message.username === username ? 'start' : 'end' } ${ message.username === 'SocketChat Bot' ? 'text-center' : '' }" style="background-color: ${ message.username === username ? 'rgba(0, 123, 255, 0.4)' : message.username === 'SocketChat Bot' ? 'rgba(128, 128, 128, 0.4)' : 'rgba(40, 167, 69, 0.4)'
     };">
-      <h5 class="card-title m-0">${ message.username } <small class="text-muted">${ message.time }</small></h5>
-      <p class="card-text mb-0">${ message.text }</p>
+      <h5 class="card-title m-0 ${ message.username === username ? 'ms-4' : 'me-4' }">${ message.username } <small class="text-muted">${ message.time }</small></h5>
+      <p class="card-text mb-0 ${ message.username === username ? 'ms-4' : 'me-4' }">${ message.text }</p>
     </div>
   `;
   chatMessages.appendChild( div );
