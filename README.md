@@ -48,6 +48,7 @@ Este chat permite a múltiples usuarios conectarse a diferentes salas de chat, e
 | joinRoom | Cuando un usuario se une a una sala, se emite este evento. |
 | message | Cuando un usuario envía un mensaje, se emite este evento para enviarlo a la sala. |
 | roomMessages | Cuando un usuario se une a una sala, se envía una lista de los mensajes más recientes en la sala. |
+| createRoom |Sirve para que los usuarios creen una sala a través de un formulario. |
 | leaveRoom | Cuando un usuario abandona una sala, se emite este evento. |
 | roomUsers | Cada vez que un usuario se une o abandona una sala, el servidor envía una lista actualizada de los usuarios en la sala. |
 | disconnect | El servidor detecta cuándo un usuario se desconecta y emite este evento para notificar a la sala. |
