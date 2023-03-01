@@ -15,9 +15,15 @@ async function socketMain ( httpServer ) {
 
   // Run when client connects
   io.on( 'connection', async ( socket ) => {
-    if ( !socket.handshake.auth.token ) {
-      return socket.disconnect( true );
-    }
+    // const token = socket.handshake.auth.token;
+    // if ( !token ) {
+    //   socket.disconnect( true );
+    //   return;
+    // }
+    // if ( token !== token ) {
+    //   socket.disconnect( true );
+    //   return;
+    // }
 
     // Send channel list to the client
     const channels = await Room.find( {}, 'name' );

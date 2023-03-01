@@ -8,7 +8,7 @@ set( 'strictQuery', false );
 
 const conexion = async () => {
   try {
-    await connect( `${ process.env.MONGO_URI }` );
+    await connect( `mongodb://${ process.env.DB_HOST }:${ process.env.DB_PORT }/${ process.env.DB_NAME }` );
     console.log( 'Conectado a la base de datos' );
   } catch ( error ) {
     console.log( error );
