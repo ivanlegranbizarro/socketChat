@@ -24,7 +24,11 @@ loginForm.addEventListener( 'submit', e => {
       if ( data.success ) {
         localStorage.setItem( 'token', data.data.token );
         localStorage.setItem( 'username', username );
-        window.location.href = `chat.html?username=${ username }&room=${ room }`;
+        if ( room == '' ) {
+          window.location.href = `chat.html?username=${ username }&room=socketChat`;
+        } else {
+          window.location.href = `chat.html?username=${ username }&room=${ room }`;
+        }
       } else {
         displayErrors.innerHTML = `<div class="text-danger mb-4">${ data.message }</div>`;
       }

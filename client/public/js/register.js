@@ -1,54 +1,58 @@
-const registerForm = document.getElementById("register-form");
-const displayErrors = document.getElementById("display-errors");
+const registerForm = document.getElementById( "register-form" );
+const displayErrors = document.getElementById( "display-errors" );
 
-registerForm.addEventListener("submit", (e) => {
+registerForm.addEventListener( "submit", ( e ) => {
   e.preventDefault();
 
-  const username = document.getElementById("username").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const passwordConfirmation = document.getElementById("passwordConfirmation").value;
-  const room = document.getElementById("room").value;
+  const username = document.getElementById( "username" ).value;
+  const email = document.getElementById( "email" ).value;
+  const password = document.getElementById( "password" ).value;
+  const passwordConfirmation = document.getElementById( "passwordConfirmation" ).value;
+  const room = document.getElementById( "room" ).value;
 
   // Perform client-side validation
-  if (!username || !email || !password || !passwordConfirmation || !room) {
+  if ( !username || !email || !password || !passwordConfirmation || !room ) {
     displayErrors.innerHTML = `<div class="text-danger mb-4">Please fill in all fields</div>`;
     return;
   }
 
-  if (password !== passwordConfirmation) {
+  if ( password !== passwordConfirmation ) {
     displayErrors.innerHTML = `<div class="text-danger mb-4">Passwords do not match</div>`;
     return;
   }
 
   // Send the registration data to the server
-  fetch("http://localhost:4000/api/users/register", {
+  fetch( "http://localhost:4000/api/users/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ username, email, password, passwordConfirmation }),
-  })
-    .then((response) => {
-      console.log(response);
+    body: JSON.stringify( { username, email, password, passwordConfirmation } ),
+  } )
+    .then( ( response ) => {
+      console.log( response );
       return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-      if (data.success) {
-        localStorage.setItem("token", data.data.token);
-        localStorage.setItem("username", username);
-        window.location.href = `chat.html?username=${username}&room=${room}`;
+    } )
+    .then( ( data ) => {
+      console.log( data );
+      if ( data.success ) {
+        localStorage.setItem( "token", data.data.token );
+        localStorage.setItem( "username", username );
+        if ( room == '' ) {
+          window.location.href = `chat.html?username=${ username }&room=socketChat`;
+        } else {
+          window.location.href = `chat.html?username=${ username }&room=${ room }`;
+        }
       } else {
-        displayErrors.innerHTML = `<div class="text-danger mb-4">${data.message}</div>`;
+        displayErrors.innerHTML = `<div class="text-danger mb-4">${ data.message }</div>`;
       }
-    })
-    .catch((error) => console.log(error));
-});
+    } )
+    .catch( ( error ) => console.log( error ) );
+} );
 
 // Add event listener to clear error message when user starts typing in a field
-registerForm.addEventListener("input", () => {
+registerForm.addEventListener( "input", () => {
   displayErrors.innerHTML = "";
-});
+} );
 
 
