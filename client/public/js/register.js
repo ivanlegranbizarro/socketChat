@@ -11,7 +11,7 @@ registerForm.addEventListener( "submit", ( e ) => {
   const room = document.getElementById( "room" ).value;
 
   // Perform client-side validation
-  if ( !username || !email || !password || !passwordConfirmation || !room ) {
+  if ( !username || !email || !password || !passwordConfirmation) {
     displayErrors.innerHTML = `<div class="text-danger mb-4">Please fill in all fields</div>`;
     return;
   }
