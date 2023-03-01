@@ -27,7 +27,7 @@ registerForm.addEventListener("submit", (e) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ username, email, password, passwordConfirmation, room }),
+    body: JSON.stringify({ username, email, password, passwordConfirmation }),
   })
     .then((response) => {
       console.log(response);
