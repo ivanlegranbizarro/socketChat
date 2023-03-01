@@ -16,11 +16,9 @@ loginForm.addEventListener( 'submit', e => {
     body: JSON.stringify( { username, password } )
   } )
     .then( response => {
-      console.log( response );
       return response.json();
     } )
     .then( data => {
-      console.log( data );
       if ( data.success ) {
         localStorage.setItem( 'token', data.data.token );
         localStorage.setItem( 'username', username );
@@ -34,7 +32,7 @@ loginForm.addEventListener( 'submit', e => {
       }
 
     } )
-    .catch( error => console.log( error ) );
+    .catch( error => alert( error ) );
 } );
 
 // Add event listener to clear error message when user starts typing in a field

@@ -45,7 +45,6 @@ socket.on( 'roomMessages', ( messages ) => {
 
 // Message from server
 socket.on( 'message', ( message ) => {
-  console.log( message );
   outPutMessage( message );
 
   // Scroll down the chat

@@ -30,11 +30,9 @@ registerForm.addEventListener( "submit", ( e ) => {
     body: JSON.stringify( { username, email, password, passwordConfirmation } ),
   } )
     .then( ( response ) => {
-      console.log( response );
       return response.json();
     } )
     .then( ( data ) => {
-      console.log( data );
       if ( data.success ) {
         localStorage.setItem( "token", data.data.token );
         localStorage.setItem( "username", username );
@@ -47,7 +45,7 @@ registerForm.addEventListener( "submit", ( e ) => {
         displayErrors.innerHTML = `<div class="text-danger mb-4">${ data.message }</div>`;
       }
     } )
-    .catch( ( error ) => console.log( error ) );
+    .catch( ( error ) => alert( error ) );
 } );
 
 // Add event listener to clear error message when user starts typing in a field
