@@ -24,7 +24,8 @@ Para ejecutar el proyecto, sigue estos pasos:
 ### Servidor
 
 1. Abre una terminal y dirígete a la carpeta correspondiente al servidor (`/server`)
-2. Ejecuta `npm run dev`
+2. Crea un archivo `.env` en la raíz del proyecto y añade las variables de entorno que aparecen en 'env-template'
+3. Ejecuta `npm run dev`
 
 ## Endpoints de la API
 
