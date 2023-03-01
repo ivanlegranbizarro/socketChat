@@ -32,7 +32,7 @@ Estos son los endpoints disponibles en la API Rest del servidor:
 
 | Método | Endpoint | Descripción |
 | ------ | -------- | ----------- |
-| POST   | /signup  | Registra un nuevo usuario |
+| POST   | /register  | Registra un nuevo usuario |
 | POST   | /login   | Inicia sesión con un usuario registrado |
 
 ## Funcionalidades del chat y eventos de los sockets
