@@ -19,13 +19,13 @@ Para ejecutar el proyecto, sigue estos pasos:
 ### Cliente
 
 1. Abre una terminal y dirígete a la carpeta correspondiente al cliente (`/client`)
-2. Ejecuta `npm run dev`
+2. Ejecuta `npm run dev` para ejecutar el proyecto en modo desarrollo o `npm start` para ejecutar el proyecto en modo producción.
 
 ### Servidor
 
 1. Abre una terminal y dirígete a la carpeta correspondiente al servidor (`/server`)
 2. Crea un archivo `.env` en la raíz del proyecto y añade las variables de entorno que aparecen en 'env-template'
-3. Ejecuta `npm run dev`
+3. Ejecuta `npm run dev` para ejecutar el proyecto en modo desarrollo o `npm start` para ejecutar el proyecto en modo producción.
 
 ## Endpoints de la API
 
