@@ -2,6 +2,7 @@ import { Server } from 'socket.io';
 import formatMessage from '../helpers/messages.js';
 import { userJoin, getCurrentUser, userLeave, getRoomUsers } from '../helpers/users.js';
 import Room from '../models/roomModel.js';
+import authToken from '../middlewares/authToken.js';
 
 const botName = 'SocketChat Bot';
 
@@ -13,18 +14,12 @@ async function socketMain ( httpServer ) {
     },
   } );
 
+  // Use the authToken middleware
+  io.use( authToken );
+
+
   // Run when client connects
   io.on( 'connection', async ( socket ) => {
-    // const token = socket.handshake.auth.token;
-    // if ( !token ) {
-    //   socket.disconnect( true );
-    //   return;
-    // }
-    // if ( token !== token ) {
-    //   socket.disconnect( true );
-    //   return;
-    // }
-
     // Send channel list to the client
     const channels = await Room.find( {}, 'name' );
     socket.emit( 'channelList', channels );

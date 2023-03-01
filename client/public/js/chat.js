@@ -89,6 +89,7 @@ document.getElementById( 'leave-btn' ).addEventListener( 'click', () => {
   if ( leaveChat ) {
     window.location = '../index.html';
     localStorage.removeItem( 'token' );
+    localStorage.removeItem( 'username' );
   }
 } );
 
@@ -144,3 +145,12 @@ const outputUsers = ( users ) => {
     ${ users.map( ( user ) => `<li class="${ user.username === username ? 'fw-bold' : '' }">${ user.username }</li>` ).join( '' ) }
   `;
 };
+
+// Escuchar el evento invalidToken
+socket.on( 'invalidToken', () => {
+  // Enviar una alerta y redirigir al usuario a la página de inicio de sesión
+  alert( 'Your session has expired. Please log in again.' );
+  localStorage.removeItem( 'token' );
+  localStorage.removeItem( 'username' );
+  window.location.href = '../index.html';
+} );
