@@ -1,14 +1,10 @@
 import mongoose from "mongoose";
-import validator from "validator";
 
 const roomSchema = new mongoose.Schema( {
   name: {
     type: String,
     required: true,
     unique: true,
-    validator: value => {
-      return validator.isLength( value, { min: 3, max: 10 } );
-    },
   },
   messages: [
     {
@@ -16,12 +12,12 @@ const roomSchema = new mongoose.Schema( {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
       },
+      name: {
+        type: String,
+      },
       message: {
         type: String,
         required: true,
-        validator: value => {
-          return validator.isLength( value, { min: 1 } );
-        }
       },
       timestamp: {
         type: Date,
@@ -30,6 +26,7 @@ const roomSchema = new mongoose.Schema( {
     }
   ]
 } );
+
 
 
 

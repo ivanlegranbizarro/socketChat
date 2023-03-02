@@ -4,10 +4,19 @@ import signToken from '../helpers/jwt.js';
 
 const userControllers = {
   register: async ( req, res ) => {
-    const { name, email, password, passwordConfirmation } = req.body;
+    const { username, email, password, passwordConfirmation } = req.body;
 
     try {
-      const user = await User.create( { name, email, password, passwordConfirmation } );
+      const userExist = await User.findOne( { $or: [ { username }, { email } ] } );
+
+      if ( userExist ) {
+        return res.status( 400 ).json( {
+          success: false,
+          message: 'User already exists'
+        } );
+      }
+
+      const user = await User.create( { username, email, password, passwordConfirmation } );
 
       const token = signToken( user._id );
 
@@ -28,9 +37,9 @@ const userControllers = {
   },
 
   login: async ( req, res ) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     try {
-      const user = await User.findOne( { email } );
+      const user = await User.findOne( { username } );
 
       if ( !user ) {
         return res.status( 404 ).json( {
@@ -65,25 +74,9 @@ const userControllers = {
         message: err.message
       } );
     }
-
   },
-  verifyUser: async ( req, res ) => {
-    try {
-      const user = await User.findById( req.userId );
-      if ( !user ) {
-        return res.status( 404 ).json( {
-          success: false,
-          message: 'User not found'
-        } );
-      }
-    } catch ( error ) {
-      res.status( 400 ).json( {
-        success: false,
-        message: error.message
-      } );
-    }
-  }
 };
+
 
 
 

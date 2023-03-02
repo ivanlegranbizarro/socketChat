@@ -1,11 +1,10 @@
 import express from 'express';
 import http from 'http';
-import { Server } from 'socket.io';
 import userRoutes from './routes/userRoutes.js';
 import notFoundRoutes from './routes/NotFound.js';
 import conexion from './db/conexion.js';
 import cors from 'cors';
-import Room from './models/roomModel.js';
+import socketMain from './sockets/socketControllers.js';
 
 const app = express();
 
@@ -20,54 +19,11 @@ app.use( notFoundRoutes );
 const port = process.env.PORT || 4000;
 
 const httpServer = http.createServer( app );
-const io = new Server( httpServer, {
-  cors: {
-    origin: [ 'http://localhost:3000' ],
-  },
-} );
 
-io.on( 'connection', async ( socket ) => {
-  // Emitir las salas disponibles a todos los clientes conectados
-  try {
-    const rooms = await Room.find();
-    io.emit( 'rooms', rooms );
-  } catch ( error ) {
-    console.error( error.message );
-  }
-
-  socket.on( 'send-message', ( data ) => {
-    socket.emit( 'response-from-server', data );
-  } );
-
-  socket.on( 'typing-start', () => {
-    socket.broadcast.emit( 'typing-start' );
-  } );
-
-  socket.on( 'typing-stop', () => {
-    socket.broadcast.emit( 'typing-stop' );
-  } );
-
-  socket.on( 'createRoom', async ( roomName ) => {
-    try {
-      const room = new Room( { name: roomName } );
-      await room.save();
-      console.log( `Room "${ roomName }" created.` );
-
-      // Emitir las salas disponibles a todos los clientes conectados
-      const rooms = await Room.find();
-      io.emit( 'rooms', rooms );
-    } catch ( error ) {
-      console.error( error.message );
-    }
-  } );
-
-  socket.on( 'disconnect', () => {
-    console.log( 'user disconnected' );
-  } );
-} );
-
-// connect to database
+// connect to db
 conexion();
+
+socketMain( httpServer );
 
 httpServer.listen( port, () => {
   console.log( `Server is running in http://localhost:${ port }` );

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <title>SocketChat App</title>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header room-list">
+            <h5><i class="bi bi-door-open-fill"></i></i> Rooms:</h5>
+            <ul id="rooms" class="list-unstyled">
+              <!-- Rooms will be added dynamically here -->
+            </ul>
+          </div>
+          <!-- Create Room Form -->
+          <div class="card mt-3">
+            <div class="card-body">
+              <form id="create-room-form">
+                <div class="input-group">
+                  <input id="room-name-input" type="text" class="form-control" placeholder="New room" required>
+                  <button id="create-room-btn" class="btn btn-primary"><i class="bi bi-plus-lg"></i></button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card-body">
+            <h5><i class="bi bi-people-fill"></i></i> Users:</h5>
+            <ul id="users" class="list-unstyled"></ul>
+            <!-- Users will be added dynamically  -->
+          </div>
+        </div>
+      </div>
+      <div class="col-9">
+        <div class="card">
+          <div class="card-header">
+            <h5><i class="fas fa-smile"></i> SocketChat</h5>
+            <button id="leave-btn" class="btn btn-primary">Leave Chat</button>
+          </div>
+          <div class="card-body chat-messages" style="height: 400px; overflow-y: auto;">
+            <div class="message">
+            </div>
+          </div>
+          <div class="card-footer">
+            <form id="chat-form">
+              <div class="input-group mb-3">
+                <input id="msg" type="text" class="form-control" placeholder="Enter Message" required
+                  autocomplete="off">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.11.0/qs.min.js"></script>
+  <!-- Socket.io client library -->
+  <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+  <!-- Main JS file -->
+  <script src="js/chat.js"></script>
+</body>
+
+</html>

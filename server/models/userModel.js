@@ -1,36 +1,25 @@
 import mongoose from 'mongoose';
-import validator from 'validator';
 import bcrypt from 'bcrypt';
 
 
 const userSchema = new mongoose.Schema( {
-  name: {
+  username: {
     type: String,
-    required: [ true, 'Username is required' ],
-    validate: [ validator.isLength, { min: 3, max: 12, message: 'Username must be between 3 and 12 characters' } ]
+    required: true,
+    unique: true,
   },
   email: {
     type: String,
-    required: [ true, 'Email is required' ],
-    lowercase: true,
-    validate: [
-      validator.isEmail, 'Please provide a valid email',
-      validator.isUnique, 'Email already exists'
-    ]
+    required: true,
+    unique: true
   },
   password: {
     type: String,
-    required: [ true, 'Password is required' ],
-    validate: [ validator.isLength, { min: 6, max: 12, message: 'Password must be between 6 and 12 characters' } ]
+    required: true
   },
   passwordConfirmation: {
     type: String,
-    required: [ true, 'Password confirmation is required' ],
-    validate: {
-      validator: function ( el ) {
-        return el === this.password;
-      }
-    }
+    required: true
   }
 },
   {

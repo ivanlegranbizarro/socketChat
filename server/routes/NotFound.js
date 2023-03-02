@@ -1,10 +1,9 @@
 import express from 'express';
+import notFoundController from '../controllers/notFoundController.js';
 
 const router = express.Router();
 
-router.get( '*', ( req, res ) => {
-  res.status( 404 ).json( { message: 'Not Found' } );
-} );
+router.get('*', notFoundController);
 
 
 export default router;
