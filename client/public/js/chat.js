@@ -153,24 +153,3 @@ socket.on( 'invalidToken', () => {
   localStorage.removeItem( 'username' );
   window.location.href = '../index.html';
 } );
-
-socket.on( 'updateRoomsAndUsers', ( data ) => {
-  const { rooms, users } = data;
-  // Actualizar lista de salas
-  const channelList = document.getElementById( 'channel-list' );
-  channelList.innerHTML = '';
-  rooms.forEach( room => {
-    const li = document.createElement( 'li' );
-    li.innerHTML = room.name;
-    channelList.appendChild( li );
-  } );
-
-  // Actualizar lista de usuarios
-  const userList = document.getElementById( 'user-list' );
-  userList.innerHTML = '';
-  users.forEach( user => {
-    const li = document.createElement( 'li' );
-    li.innerHTML = user.username;
-    userList.appendChild( li );
-  } );
-} );

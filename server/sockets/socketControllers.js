@@ -58,12 +58,6 @@ async function socketMain ( httpServer ) {
       } );
     } );
 
-    // Emit event to update the list of rooms and users
-    io.emit( 'updateRoomsAndUsers', {
-      rooms: await Room.find( {}, 'name' ),
-      users: getRoomUsers( user.room ),
-    } );
-
     // Listen for createRoom event
     socket.on( 'createRoom', async ( newRoomName, callback ) => {
       try {
